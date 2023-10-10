@@ -178,7 +178,7 @@
                 <div class="row justify-content-center" data-aos="fade-up" data-aos-delay="150">
                     <div class="col-xl-6 col-lg-8" style="padding-top:10px;">
                         <h1><span>GURINDAM</span></h1>
-                        <h2>Gapura Pembelajaran Individu Aktif Mandiri Sebagai Pusat Pembelajaran ASN aasd</h2>
+                        <h2>Gapura Pembelajaran Individu Aktif Mandiri Sebagai Pusat Pembelajaran ASN</h2>
                     </div>
                     <form action="{{route('materi.index')}}<?php /*{url('/front/materi/')} */ ?>" method="GET">
                         @csrf
