@@ -64,7 +64,7 @@
 
                                 <div class="widget-toolbar">
                                     <span class="badge badge-danger" style="border-radius:0px;">
-                                        <a href="{{route('hubungi_admin.create')}}" style="color:white">
+                                        <a <?php /*href="{{route('hubungi_admin.create')}}"*/ ?> href="{{url('front/hubungi_admin/create/')}}" style="color:white">
                                             <i class="ace-icon fa fa-plus"></i> Topik
                                         </a>    
                                         <?php /*

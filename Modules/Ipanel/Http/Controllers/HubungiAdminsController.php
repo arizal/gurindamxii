@@ -8,7 +8,7 @@ use Illuminate\Routing\Controller;
 
 use Illuminate\Support\Facades\DB;
 
-class HubungiAdminController extends Controller
+class HubungiAdminsController extends Controller
 {
     public $table_hubungi_admin     ="hubungi_admin";
     public $table_user              ="users";

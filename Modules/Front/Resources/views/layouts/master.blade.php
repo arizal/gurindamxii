@@ -85,9 +85,9 @@
               <li><a href="{{url('/front/dashboard/')}}"><i class="fa fa-home fa-lg"></i>Dashboard</a></li>
               <li class="dropdown"><a href="#"><i class="fa fa-list fa-lg"></i><span>Daftarku</span> <i class="bi bi-chevron-right"></i></a>
                 <ul>
-                  <li><a href="{{url('/front/daftarku/disukai/199002132023211016')}}"><i class="fa fa-heart fa-lg"></i>Ditandai (2)</a></li>
-                  <li><a href="{{url('/front/daftarku/ditandai/199002132023211016')}}"><i class="fa fa-thumbtack fa-lg"></i>Disukai (50)</a></li>
-                  <li><a href="{{url('/front/daftarku/daftar_baca/199002132023211016')}}"><i class="fa fa-list fa-lg"></i>Daftar Baca (3)</a></li>
+                  <li><a href="{{url('/front/daftarku/disukai/sukai')}}"><i class="fa fa-heart fa-lg"></i>Disukai<?php /*(2)*/ ?></a></li>
+                  <li><a href="{{url('/front/daftarku/ditandai/tandai')}}"><i class="fa fa-thumbtack fa-lg"></i>Ditandai</a></li>
+                  <li><a href="{{url('/front/daftarku/daftar_baca/baca')}}"><i class="fa fa-list fa-lg"></i>Daftar Baca</a></li>
                 </ul>
               </li>
               <li><a href="{{url('/front/riwayat_baca')}}"><i class="fa fa-newspaper-o fa-lg"></i>Riwayat Baca</a></li>
@@ -248,38 +248,38 @@
 				if(isset($data['form_ajax_upload'])){?>
 					$('<?php print $data['form_ajax_upload']['theid'] ?>').submit(function(e){
 						e.preventDefault(); 
-              $.ajax({
-								url:$(this).closest('form').attr('action'),
-								type:"post",
-								data:new FormData(this), 
-								processData:false,
-								contentType:false,
-								dataType: "json",
-								cache:false,
-								async:false,
-								success: function(data){
-									if($.isEmptyObject(data.errors)){
-										window.location.href = data.success;
-                    //window.location = data.success;
-									}else{
-										swal({ 
-											html:true,
-											type: 'error',
-											title: 'Error',
-											text:'<span style="font-size:14px">'+ data.errors +'</span>',
-											text: data.errors,
-										});
-									}
-							},
-							error: function(err, exception) {
-								swal({ 
-										html:true,
-										type: 'error',
-										title: 'Error',
-										text: '<span style="font-size:14px">Gagal menambahkan data!</span>',
-									});
-							},
-						});
+            $.ajax({
+              url:$(this).closest('form').attr('action'),
+              type:"post",
+              data:new FormData(this), 
+              processData:false,
+              contentType:false,
+              dataType: "json",
+              cache:false,
+              async:false,
+              success: function(data){
+                if($.isEmptyObject(data.errors)){
+                  window.location.href = data.success;
+                  //window.location = data.success;
+                }else{
+                  swal({ 
+                    html:true,
+                    type: 'error',
+                    title: 'Error',
+                    text:'<span style="font-size:14px">'+ data.errors +'</span>',
+                    text: data.errors,
+                  });
+                }
+              },
+              error: function(err, exception) {
+                swal({ 
+                    html:true,
+                    type: 'error',
+                    title: 'Error',
+                    text: '<span style="font-size:14px">Gagal menambahkan data!</span>',
+                  });
+              },
+            });
 					});
 				<?php }?>
         $('#gritter-center').on(ace.click_event, function(){
@@ -323,7 +323,178 @@
 				}
 
     });
+    function load_more(haloid){
+      var params = new window.URLSearchParams(window.location.search);
+      console.log(params);
 
+      data = {
+        "cari_filter":params.get('cari_filter[]'),
+        "page": params.get('page'),
+        "cari_materi":params.get('cari_materi'),
+        "_token":$('meta[name="csrf-token"]').attr('content'),
+      }
+      jQuery.ajax({
+          type: 'GET',
+          url: "{{url('/front/materi/load_more')}}/"+haloid,
+          data: data,
+          dataType: 'json',
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          success: function(data) { 
+            if($.isEmptyObject(data.errors)){
+              if(data.count==data.count_all || data.count==0){
+                $('.load_more_button').hide();
+              }else{
+                $('.load_more_button').show();
+              }
+              
+              window.history.pushState('', '', data.return_url);
+              $.each( data.success, function( key, value ) {
+                var link_materis       ="'"+value.plink+"'";
+                var link_materis_list  ="'read_later'";
+                var link_materis_love  ="'like'";
+                var dt_appmateri='<div class="col-lg-3 col-md-6 d-flex align-items-stretch">'
+                        +'<div class="member aos-init aos-animate" data-aos="fade-up" data-aos-delay="100" style="background-color:#ccc">'
+                            +'<div class="member-img">'
+                              +'<img src="'+value.img+'" class="img-fluid" alt="">'
+                              +'<div class="social" style="display:block; width:100%; background-color:#ccc; padding:5px 0px;">'
+                              +'<a class="btn_dtl" title="Tambahkan ke Daftar Baca" onclick="addItemToCart('+link_materis+','+link_materis_list+')"><i class="fa-solid fa-list"></i></a>'
+                              +'<a class="btn_dtl" title="Sukai Materi ini" onclick="addItemToCart('+link_materis+','+link_materis_love+')"><i class="fa-solid fa-heart"></i></a>'
+                              +'</div>'                            
+                            +'</div>'
+                                +'<div class="" style="font-size:12px; padding:5px;background-color:#C53A54;height:26px;">'
+                                +'<div style="float:left">'
+                                  +'<span style="color:#000; background-color:#E6CB90; margin-right:10px; padding:6px 10px ; margin-left:-5px;"><strong>'+value.type+'</strong></span>'
+                                  +'<span style="color:#fff;margin-left:-5px;"><i class="fa-solid fa-clock"></i> : '+value.estimate+' menit</span>'
+                                +'</div>'
+                                +'<div style="float:right">'  
+                                  +'<a style="color:#FFD584"><i class="fa-regular fa-comment"></i> '+value.comments+'</a>'
+                                  +'<a style="color:#FFD584"><i class="fa-regular fa-star"></i> '+value.star+'</a>'
+                                  +'<a style="color:#FFD584"><i class="fa-regular fa-eye"></i> '+value.view+'</a>'
+                                +'</div>'    
+                            +'</div>'
+                            +'<div class="" style="font-size:20px; padding:5px;text-align:right">'
+                              +'<i class="fa-solid fa-video"></i>&nbsp;'
+                            +'</div>'
+                            +'<div class="" style="font-size:15px; padding:5px 0px 0px 15px;margin-top:-20px;">'
+                              +'<span style="margin-top:0px;font-weight:bold">'
+                                +'<a href="'+value.caturl+'" style="color:#C53A54">'+value.cat+'</a>'
+                              +'</span>'
+                            +'</div>'
+                            +'<div class="member-info" style="margin-top:0px; padding: 0px 10px 15px 15px;text-align:justify; font-size:13px; font-weight:bold">'
+                              +'<a href="'+value.url+'" style="color:#1A3773;">'+value.title+'</a>'
+                            +'</div>'
+                        +'</div>'
+                      +'</div>';
+                  $('.data_materi').append(dt_appmateri);    
+              });
+              
+            }else{
+              $.gritter.add({
+                text: '<div style="text-align:center">Error Guys Didalem</div>',
+              });
+            }
+              
+          },
+          error: function(err, exception) {
+            $.gritter.add({
+              text: '<div style="text-align:center">Error Guys</div>',
+            });
+          },
+      });
+    }
+    function filterCategory(haloid){
+      var params = new window.URLSearchParams(window.location.search);
+      //alert(params.get('cari_materi'));
+      data = {
+            "id": haloid,
+            "cari_materi":params.get('cari_materi'),
+            "_token":$('meta[name="csrf-token"]').attr('content'),
+      }
+      jQuery.ajax({
+          type: 'GET',
+          url: "{{url('/front/materi/filter_category')}}/"+haloid,
+          data: data,
+          dataType: 'json',
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          },
+          success: function(data) { 
+            //alert(data);
+            if($.isEmptyObject(data.errors)){
+              window.history.pushState('', '', data.return_url);
+              $('.data_materi').empty();
+              //console.log(data.success);
+              // var obj = {
+              //   "flammable": "inflammable",
+              //   "duh": "no duh"
+              // };
+              //alert(obj);
+              
+              $.each( data.success, function( key, value ) {
+                //alert( key + ": " + value );
+                if(data.count==data.count_all){
+                  $('.load_more_button').hide();
+                }else{
+                  $('.load_more_button').show();
+                }
+                var link_materis       ="'"+value.plink+"'";
+                var link_materis_list  ="'read_later'";
+                var link_materis_love  ="'like'";
+                
+                var dt_appmateri='<div class="col-lg-3 col-md-6 d-flex align-items-stretch">'
+                        +'<div class="member aos-init aos-animate" data-aos="fade-up" data-aos-delay="100" style="background-color:#ccc">'
+                            +'<div class="member-img">'
+                              +'<img src="'+value.img+'" class="img-fluid" alt="">'
+                              +'<div class="social" style="display:block; width:100%; background-color:#ccc; padding:5px 0px;">'
+                              +'<a class="btn_dtl" title="Tambahkan ke Daftar Baca" onclick="addItemToCart('+link_materis+','+link_materis_list+')"><i class="fa-solid fa-list"></i></a>'
+                              +'<a class="btn_dtl" title="Sukai Materi ini" onclick="addItemToCart('+link_materis+','+link_materis_love+')"><i class="fa-solid fa-heart"></i></a>'
+                              +'</div>'                            
+                            +'</div>'
+                                +'<div class="" style="font-size:12px; padding:5px;background-color:#C53A54;height:26px;">'
+                                +'<div style="float:left">'
+                                  +'<span style="color:#000; background-color:#E6CB90; margin-right:10px; padding:6px 10px ; margin-left:-5px;"><strong>'+value.type+'</strong></span>'
+                                  +'<span style="color:#fff;margin-left:-5px;"><i class="fa-solid fa-clock"></i> : '+value.estimate+' menit</span>'
+                                +'</div>'
+                                +'<div style="float:right">'  
+                                  +'<a style="color:#FFD584"><i class="fa-regular fa-comment"></i> '+value.comments+'</a>'
+                                  +'<a style="color:#FFD584"><i class="fa-regular fa-star"></i> '+value.star+'</a>'
+                                  +'<a style="color:#FFD584"><i class="fa-regular fa-eye"></i> '+value.view+'</a>'
+                                +'</div>'    
+                            +'</div>'
+                            +'<div class="" style="font-size:20px; padding:5px;text-align:right">'
+                              +'<i class="fa-solid fa-video"></i>&nbsp;'
+                            +'</div>'
+                            +'<div class="" style="font-size:15px; padding:5px 0px 0px 15px;margin-top:-20px;">'
+                              +'<span style="margin-top:0px;font-weight:bold">'
+                                +'<a href="'+value.caturl+'" style="color:#C53A54">'+value.cat+'</a>'
+                              +'</span>'
+                            +'</div>'
+                            +'<div class="member-info" style="margin-top:0px; padding: 0px 10px 15px 15px;text-align:justify; font-size:13px; font-weight:bold">'
+                              +'<a href="'+value.url+'" style="color:#1A3773;">'+value.title+'</a>'
+                            +'</div>'
+                        +'</div>'
+                      +'</div>';
+                  $('.data_materi').append(dt_appmateri);    
+              });
+              $(".btn_category").removeClass("btn-warning");
+              $("#btn_"+data.idx).addClass('btn-warning');
+              
+            }else{
+              $.gritter.add({
+                text: '<div style="text-align:center">Error Guys Didalem</div>',
+              });
+            }
+              
+          },
+          error: function(err, exception) {
+            $.gritter.add({
+              text: '<div style="text-align:center">Error Guys</div>',
+            });
+          },
+      });
+    }
     function addItemToCart(variant_id, type_option) {
       data = {
         "id": variant_id,

@@ -82,8 +82,8 @@ Route::prefix("ipanel")->namespace('\Modules\Ipanel\Http\Controllers')->middlewa
 
     Route::resource('contact_us','ContactUsController');
 
-    Route::resource('hubungi_admin','HubungiAdminController');
-    Route::post('hubungi_admin/reply_comments/{id}', 'HubungiAdminController@reply_comments')->name('hubungi_admin.reply_comments');
+    Route::resource('hubungi_admins','HubungiAdminsController');
+    Route::post('hubungi_admins/reply_comments/{id}', 'HubungiAdminsController@reply_comments')->name('hubungi_admins.reply_comments');
 
     
     

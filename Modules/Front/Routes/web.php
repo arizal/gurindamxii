@@ -19,6 +19,9 @@ Route::prefix('front')->group(function() {
     Route::post('materi/post_replycomments/{id}', 'MateriController@post_replycomments')->name('materi.post_replycomments');
     Route::get('materi/post_finish/{id}', 'MateriController@post_finish')->name('materi.post_finish');
     Route::get('materi/read_materi/{id}', 'MateriController@read_materi')->name('materi.read_materi');  
+    Route::get('materi/filter_category/{id}', 'MateriController@filter_category')->name('materi.filter_category');
+    Route::get('materi/load_more/{id}', 'MateriController@load_more')->name('materi.load_more'); 
+    
 
     Route::resource('dashboard','DashboardController');
     Route::resource('setting','SettingController');
@@ -35,6 +38,8 @@ Route::prefix('front')->group(function() {
 
     Route::resource('hubungi_admin','HubungiAdminController');
     Route::post('hubungi_admin/post_comments/{id}', 'HubungiAdminController@post_comments')->name('hubungi_admin.post_comments');
+
+    
 
     #Route::post('front/post_contactus', 'FrontController@post_contactus')->name('front.post_contactus');
 

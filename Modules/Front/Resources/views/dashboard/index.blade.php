@@ -174,7 +174,7 @@
 
                             <div class="widget-toolbar">
                                 <span class="badge badge-danger" style="border-radius:0px;">
-                                    x
+                                    &nbsp;
                                 </span>
                             </div>
                         </div>
@@ -255,10 +255,20 @@
                                                         </style>
                                                         <div class="row">
                                                             <div class="col-lg-6" style="text-align:center">
-                                                                <div class="pie" style="--p:100;--c:purple;--b:10px; text-align:center"> {{$data_dashboard['dt_read']['total_materi']}}<br>Materi</div>
+                                                                <div class="col-lg-12" style="text-align:center">
+                                                                    <div class="pie" style="--p:100;--c:purple;--b:10px; text-align:center"> {{$data_dashboard['dt_read']['total_materi']}}<br>Materi</div>
+                                                                </div>
+                                                                <div class="col-lg-12" style="text-align:center">
+                                                                    <em>Jumlah  Materi yang telah ditandai Selesai Dibaca</em>
+                                                                </div>
                                                             </div>
                                                             <div class="col-lg-6" style="text-align:center">
-                                                                <div class="pie animate no-round" style="--p:{{$data_dashboard['dt_read']['total_persen']}};--c:orange;"> {{$data_dashboard['dt_read']['total_persen']}}%</div>
+                                                                <div class="col-lg-12" style="text-align:center">
+                                                                    <div class="pie animate no-round" style="--p:{{$data_dashboard['dt_read']['total_persen']}};--c:orange;"> {{$data_dashboard['dt_read']['total_persen']}}%</div>
+                                                                </div>
+                                                                <div class="col-lg-12" style="text-align:center">
+                                                                    <em>Jumlah Persentase Materi yang Selesai Dibaca</em>
+                                                                </div>    
                                                             </div>
                                                         </div>    
                                                         
@@ -348,7 +358,7 @@
 
                             <div class="widget-toolbar">
                                 <span class="badge badge-danger" style="border-radius:0px;">
-                                    x
+                                    &nbsp;
                                 </span>
                             </div>
                         </div>

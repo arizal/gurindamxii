@@ -35,12 +35,12 @@ class RiwayatBacaController extends Controller
         $data_get = DB::table($this->table_pengetahuan_activity)
                         ->select($this->table_pengetahuan.".pgId",$this->table_pengetahuan.".pgImage",$this->table_pengetahuan.".pgType",$this->table_pengetahuan.".pgTitle",$this->table_pengetahuan.".pgPermalink",$this->table_pengetahuan.".pgTimePost",$this->table_pengetahuan.".pgDescription",$this->table_pengetahuan.".pgEstimation",$this->table_pengetahuan.".pgViewed",
                                     $this->table_pengetahuan_category.".catId",$this->table_pengetahuan_category.".catName",$this->table_pengetahuan_category.".catPermalink",
-                                    $this->table_pengetahuan_content.".pcContentType",$this->table_pengetahuan_content.".pcText",$this->table_pengetahuan_content.".pcVideo",$this->table_pengetahuan_content.".pcDocuments",
+                                    //$this->table_pengetahuan_content.".pcContentType",$this->table_pengetahuan_content.".pcText",$this->table_pengetahuan_content.".pcVideo",$this->table_pengetahuan_content.".pcDocuments",
                                     $this->table_pengetahuan_activity.".*"
                                     )
                         ->leftJoin($this->table_pengetahuan, $this->table_pengetahuan_activity.'.refId', '=', $this->table_pengetahuan.'.pgPermalink')            
                         ->leftJoin($this->table_pengetahuan_category, $this->table_pengetahuan_category.'.catId', '=', $this->table_pengetahuan.'.catId')
-                        ->leftJoin($this->table_pengetahuan_content, $this->table_pengetahuan.'.pgId', '=', $this->table_pengetahuan_content.'.pgId')
+                        //->leftJoin($this->table_pengetahuan_content, $this->table_pengetahuan.'.pgId', '=', $this->table_pengetahuan_content.'.pgId')
                         //->leftJoin($this->table_user, $this->table_pengetahuan.'.id_user', '=', $this->table_user.'.id')
                         ->where($this->table_pengetahuan_activity.'.id_user', session()->get('USER_LOGIN.ID'))
                         ->orderBy($this->table_pengetahuan_activity.'.created_at', 'DESC')

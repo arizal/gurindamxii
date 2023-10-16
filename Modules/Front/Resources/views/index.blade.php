@@ -170,6 +170,8 @@
                 width:100% !important;
                 font-size:20px;
             }
+            
+
         </style>
         <!-- ======= Hero Section ======= -->
         <section id="hero" class="d-flex align-items-center justify-content-center">
@@ -786,7 +788,7 @@
                                 
                                 <div class="social" style="display:block; width:100%; background-color:#ccc; padding:5px 0px;">
                                     <a class="btn_dtl" title="Tambahkan ke Daftar Baca" onClick="addItemToCart('{{$pgval->pgPermalink}}','read_later')"><i class="fa-solid fa-list"></i></a>
-                                    <a style="<?php /*{{$pgval->pnId ? 'background:red; color:white' : ''}}*/ ?>" class="btn_dtl done_already" title="Tandai Materi ini" onClick="addItemToCart('{{$pgval->pgPermalink}}','pin')"><i class="fa-solid fa-thumbtack"></i></a>
+                                    <?php /*<a style="<?php #{{$pgval->pnId ? 'background:red; color:white' : ''}} ?>" class="btn_dtl done_already" title="Tandai Materi ini" onClick="addItemToCart('{{$pgval->pgPermalink}}','pin')"><i class="fa-solid fa-thumbtack"></i></a>*/ ?>
                                     <a style="<?php /*{{$pgval->lkId ? 'background:red; color:white' : ''}}*/ ?>" class="btn_dtl" title="Sukai Materi ini" onClick="addItemToCart('{{$pgval->pgPermalink}}','like')"><i class="fa-solid fa-heart"></i></a>
                                 </div> 
                             </div>
@@ -796,9 +798,9 @@
                                     <span style="color:#fff;margin-left:-5px;"><i class="fa-solid fa-clock"></i> : {{$pgval->pgEstimation}} menit</span>
                                 </div>
                                 <div style="float:right">    
-                                    <a href=""><i class="fa-regular fa-comment"></i> {{$comments}}</a>
-                                    <a href=""><i class="fa-regular fa-star"></i> {{rand(1,5)}}</a>
-                                    <a href=""><i class="fa-regular fa-eye"></i> {{$pgval->pgViewed}}</a>
+                                    <a style="color:#FFD584"><i class="fa-regular fa-comment"></i> {{$comments}}</a>
+                                    <a style="color:#FFD584"><i class="fa-regular fa-star"></i> {{rand(1,5)}}</a>
+                                    <a style="color:#FFD584"><i class="fa-regular fa-eye"></i> {{$pgval->pgViewed}}</a>
                                 </div>    
                             </div>
                             <div class="" style="font-size:20px; padding:5px;text-align:right">
@@ -863,7 +865,7 @@
                                 
                                 <div class="social" style="display:block; width:100%; background-color:#ccc; padding:5px 0px;">
                                     <a class="btn_dtl" title="Tambahkan ke Daftar Baca" onClick="addItemToCart('{{$pgval->pgPermalink}}','read_later')"><i class="fa-solid fa-list"></i></a>
-                                    <a class="btn_dtl" title="Tandai Materi ini" onClick="addItemToCart('{{$pgval->pgPermalink}}','pin')"><i class="fa-solid fa-thumbtack"></i></a>
+                                    <?php /*<a class="btn_dtl" title="Tandai Materi ini" onClick="addItemToCart('{{$pgval->pgPermalink}}','pin')"><i class="fa-solid fa-thumbtack"></i></a>*/ ?>
                                     <a class="btn_dtl" title="Sukai Materi ini" onClick="addItemToCart('{{$pgval->pgPermalink}}','like')"><i class="fa-solid fa-heart"></i></a>
                                 </div> 
                             </div>
@@ -873,9 +875,9 @@
                                     <span style="color:#fff;margin-left:-5px;"><i class="fa-solid fa-clock"></i> : {{$pgval->pgEstimation}} menit</span>
                                 </div>
                                 <div style="float:right">    
-                                    <a href=""><i class="fa-regular fa-comment"></i> {{$comments}}</a>
-                                    <a href=""><i class="fa-regular fa-star"></i> {{rand(1,5)}}</a>
-                                    <a href=""><i class="fa-regular fa-eye"></i> {{$pgval->pgViewed}}</a>
+                                    <a style="color:#FFD584"><i class="fa-regular fa-comment"></i> {{$comments}}</a>
+                                    <a style="color:#FFD584"><i class="fa-regular fa-star"></i> {{rand(1,5)}}</a>
+                                    <a style="color:#FFD584"><i class="fa-regular fa-eye"></i> {{$pgval->pgViewed}}</a>
                                 </div>    
                             </div>
                             <div class="" style="font-size:20px; padding:5px;text-align:right">

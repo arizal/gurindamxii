@@ -596,8 +596,8 @@
 						</ul>
 					</li>
 
-                    <li class="{{Request::segment(2)=='hubungi_admin'? 'active':''}}">
-						<a href="{{url('/ipanel/hubungi_admin')}}">
+                    <li class="{{Request::segment(2)=='hubungi_admins'? 'active':''}}">
+						<a href="{{url('/ipanel/hubungi_admins')}}">
 							<i class="menu-icon fa fa-comments-o"></i>
 							<span class="menu-text"> Hubungi Admin </span>
 						</a>

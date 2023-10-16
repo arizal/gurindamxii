@@ -128,7 +128,7 @@
             #for($x=1;$x<5;$x++){?>
             @foreach($data['data'] as $cukey=>$cupem)
             @php
-                $comments = Modules\ipanel\Http\Controllers\HubungiAdminController::count_comments($cupem->haId);
+                $comments = Modules\ipanel\Http\Controllers\HubungiAdminsController::count_comments($cupem->haId);
             @endphp
             <tr class="datarow <?php /*{{$cupem->cuRead =='unread'?'unread':''}} */ ?>">
                 <td class="center">{{($data['data']->currentPage() - 1) * $data['data']->perPage() + $loop->iteration}}</td>

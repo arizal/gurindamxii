@@ -33,7 +33,7 @@ class FrontController extends Controller
      */
     public function index(request $request)
     {
-        DB::enableQueryLog();
+        #DB::enableQueryLog();
         $query              = DB::table($this->table_pengetahuan)
                                 ->select(
                                     $this->table_pengetahuan.".*",

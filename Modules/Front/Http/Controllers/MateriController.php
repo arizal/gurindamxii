@@ -9,6 +9,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\DB;
 use Modules\Ipanel\Entities\PengetahuanCategoryModel;
 use Modules\Ipanel\Entities\PengetahuanModel;
+use Illuminate\Support\Facades\Input;
 
 class MateriController extends Controller
 {
@@ -21,8 +22,8 @@ class MateriController extends Controller
     public $table_pengetahuan_read          ="pengetahuan_read";
     public $table_pengetahuan_read_content  ="pengetahuan_read_content";
 
-    public $assets_pengetahuan          ="public/images/assets_pengetahuan/";
-    public $paging                      =20;
+    public $assets_pengetahuan              ="public/images/assets_pengetahuan/";
+    public $paging                          =4;
     /**
      * Display a listing of the resource.
      * @return Renderable
@@ -78,14 +79,6 @@ class MateriController extends Controller
             });
         }
         if(app('request')->input('cari_filter')){
-            #$implode=implode(",",app('request')->input('cari_filter'));
-            #foreach(app('request')->input('cari_filter') as $kx=>$xl){
-            #    $impl[]="'".$xl."'";
-            #}
-            #$implode=implode(",",$impl);
-            // print_r($impl);
-            // exit;
-            #$query=$query->whereIn('catPermalink', [$implode]);
             $query=$query->where(function($query){
                 foreach(app('request')->input('cari_filter') as $kx=>$xl){
                     $query=$query->orWhere('catPermalink', $xl);
@@ -100,19 +93,16 @@ class MateriController extends Controller
         #print_r($query);
         #exit;
         $query_category      = DB::table($this->table_pengetahuan_category)
-                                ->select("catName","catPermalink")
+                                ->select("catId","catName","catPermalink")
                                 ->where('catStatus','y')
                                 ->orderBy('catName', 'ASC')
                                 ->get();
-        
        
         $data['category']       =$query_category;
         $data['data']           =$query;
         $data['data_count']     =$query->count();
-        // $data['new_ajax']       ="
-        //     window.location.replace(\"http:www.example.com\");
-        // ";
-        return view('front::pengetahuan.index',['data_pengetahuan'=>$data]);
+        $data['new_ajax']       ="";
+        return view('front::pengetahuan.index',['data'=>$data]);
 
         
     }
@@ -155,7 +145,7 @@ class MateriController extends Controller
         
         $data_get = DB::table($this->table_pengetahuan)
                             #pgType 	pgTitle 	pgPermalink 	pgTimePost 	pgDescription 	pgEstimation	
-                            ->select($this->table_pengetahuan.".pgId",$this->table_pengetahuan.".pgType",$this->table_pengetahuan.".pgTitle",$this->table_pengetahuan.".pgPermalink",$this->table_pengetahuan.".pgTimePost",$this->table_pengetahuan.".pgDescription",$this->table_pengetahuan.".pgEstimation",$this->table_pengetahuan.".pgViewed",
+                            ->select($this->table_pengetahuan.".pgId",$this->table_pengetahuan.".pgType",$this->table_pengetahuan.".pgTitle",$this->table_pengetahuan.".pgPermalink",$this->table_pengetahuan.".pgTimePost",$this->table_pengetahuan.".pgDescription",$this->table_pengetahuan.".pgEstimation",$this->table_pengetahuan.".pgViewed",$this->table_pengetahuan.".pgImage",
                                      $this->table_pengetahuan_category.".catId",$this->table_pengetahuan_category.".catName",$this->table_pengetahuan_category.".catPermalink",
                                      $this->table_pengetahuan_content.".pcContentType",$this->table_pengetahuan_content.".pcText",$this->table_pengetahuan_content.".pcVideo",$this->table_pengetahuan_content.".pcDocuments",$this->table_user.".name",
                                      $this->table_pengetahuan_read.".prId",$this->table_pengetahuan_read.".readContent"
@@ -278,6 +268,7 @@ class MateriController extends Controller
                                                 $('.post_commentsx').val('');
                                             }
                                         }else{
+                                            grecaptcha.reset();
                                             swal({ 
                                                 html:true,
                                                 type: 'error',
@@ -340,6 +331,26 @@ class MateriController extends Controller
                                         }
                                     })
                                 //}
+                            });
+
+                            $('.kategorinama').on('click', function(){
+                                alert($(this).val());
+                            });
+                            $('input[name=\"kategorinama\"]').on(\"click\", function(){
+                                var category_id = $(this).val();
+                                $.ajax({
+                                    url:'https://jsonplaceholder.typicode.com/posts',
+                                    type: \"GET\",
+                                    success:function(result){
+                                        $(\".data_materi\").empty();
+                                        $.each(result,function(index, postObj){
+                                            $(\".data_materi\").append(\"<li>\"+postObj.title+\"</li><p>\"+postObj.body+\"</p>\");
+                                        });
+                                    },
+                                    error: function(error) {
+                                        console.log(error.status)
+                                    }
+                                });
                             });
 
             ",
@@ -437,6 +448,10 @@ class MateriController extends Controller
             return response()->json(['errors'=>$validator->errors()->all()]);
             exit;
         }else{
+            if(strip_tags($request->komentar)==""){
+                return response()->json(['errors'=>"Kolom Komentar Wajib Diisi"]);
+                exit;
+            }
             $data_get = DB::table($this->table_pengetahuan)
                                 ->select("pgId","pgPermalink")
                                 ->where('pgPermalink', $getid)
@@ -611,5 +626,218 @@ class MateriController extends Controller
         }
         #END OF INSERT TO ACTUAL READ MATERI.........................................
     }
+    public static function get_count($id){
+        $query=DB::table("pengetahuan_comment")->select('cmId')->where("pgId",$id)->count();
+        return $query;
+    }
+
+    public function filter_category(Request $request,$id){
+        $idexp              =explode("-",$id);
+        $cari_materi        =Input::get('cari_materi');
+        $_token             =Input::get('_token');
+        $_id                =Input::get('id');
+        $page               =Input::get('page') ? Input::get('page') : 0;
+        $offset             =($page - 1) * $this->paging;
+        $query  = DB::table($this->table_pengetahuan)
+                ->select(
+                    $this->table_pengetahuan.".*",
+                    $this->table_pengetahuan_category.".*",
+                )
+                ->leftJoin($this->table_pengetahuan_category, $this->table_pengetahuan_category.'.catId', '=', $this->table_pengetahuan.'.catId');
+        #print $cari_materi; exit;
+        if(Input::get('cari_materi')){
+            $query=$query->where(function($query){
+                $query=$query->where('pgTitle', 'like', '%'.Input::get('cari_materi').'%');
+                $query=$query->orWhere('pgDescription', 'like', '%'.Input::get('cari_materi').'%');
+            });
+        }
+        if($id=="0-semua"){
+
+        }else{
+            $query=$query->orWhere('catPermalink', Input::get('id'));
+        }
+        $query      =$query->where('pgTimePost',"<",date('Y-m-d H:i:s'))->orderBy('pgId', 'DESC');
+        $count_all  =$query->count();      
+        $query=$query->offset($offset)->limit($this->paging)->get();
+        #$query=$query->paginate($this->paging);
+        #print "<pre>";
+        // print_r($query);
+        // exit;
+        $no=0;
+        $data_return=array();
+        foreach($query as $key=>$val){
+            $data_return[$no]=array(                
+                            "title"     =>$val->pgTitle,
+                            "img"       =>asset('storage/images/assets_pengetahuan/'.$val->pgImage),
+                            "plink"     =>$val->pgPermalink,
+                            "url"       =>url("front/materi/".$val->pgPermalink),
+                            "estimate"  =>$val->pgEstimation,
+                            "type"      =>$val->pgType,
+                            "comments"  =>$this->get_count($val->pgId),
+                            "star"      =>"4.7",
+                            "view"      =>$val->pgViewed,
+                            "cat"       =>$val->catName,
+                            "caturl"    =>url("front/materi/?cari_filter[]=".$val->catPermalink),
+                            "typec"     =>$this->get_typecontent($val->pgId),
+                            );
+            $no++;
+        }
+
+        // print "<pre>";
+        // print_r($_GET);
+        // exit;
+        
+        if($_token){        $_token    ="_token=".$_token;}
+        if($cari_materi){   $cari_materi="&cari_materi=".$cari_materi;}
+        if($_id){           $_id        ="&cari_filter[]=".$_id;}
+        
+        $data_return['success']     =$data_return;
+        $data_return['idx']         =$idexp[0];
+        $data_return['count']       =$query->count();
+        $data_return['count_all']   =$count_all;
+        $data_return['return_url']  =route('materi.index')."?".($_token ? $_token: '').($cari_materi ? $cari_materi: '').($_id ?$_id: '');
+
+        /*
+        $data_isi[0]['judul']   ="JUDUL SATU";
+        $data_isi[0]['link']    ="121-link-satu";
+        $data_isi[1]['judul']   ="JUDUL DUA";
+        $data_isi[1]['link']    ="122-link-dua";
+        $data_isi[2]['judul']   ="JUDUL TIGA";
+        $data_isi[2]['link']    ="123-link-tiga";
+
+        $object = new \stdClass();
+        foreach ($data_isi as $key => $value){
+            $object->$key = $value;
+        }*/
+        /*
+        'success'=>[
+                "id"=>111
+            ],
+            "notification"=>"hai hai hai",*/
+        /*
+        $asdad="ISINYA_ISINYA";
+        $inireturn=
+            [
+            "success"=>[
+                        [
+                            "title"     =>$asdad,
+                            "img"       =>$asdad,
+                            "url"       =>$asdad,
+                            "estimate"  =>$asdad,
+                            "type"      =>$asdad,
+                            "comments"  =>$asdad,
+                            "star"      =>$asdad,
+                            "view"      =>$asdad,
+                            "cat"       =>$asdad,
+                            "caturl"    =>$asdad,
+                            "typec"     =>$asdad,
+                        ],
+                        [
+                            "title"     =>$asdad,
+                            "img"       =>$asdad,
+                            "url"       =>$asdad,
+                            "estimate"  =>$asdad,
+                            "type"      =>$asdad,
+                            "comments"  =>$asdad,
+                            "star"      =>$asdad,
+                            "view"      =>$asdad,
+                            "cat"       =>$asdad,
+                            "caturl"    =>$asdad,
+                            "typec"     =>$asdad,
+                        ]
+                    ]
+            ];
+        */    
+        //  print "<pre>";
+        //  //print_r(json_encode($inireturn));
+        //  print_r($data_isi);
+        //  exit;
+        #$for_send=str_replace("]","",str_replace("[","",json_encode($inireturn)));
+        #$data_isi['success']=$data_isi;
+        return response()->json($data_return);
+    }
+
+    function object_to_array($data){
+        $result = [];
+        foreach ($data as $key => $value){
+            $result[$key] = (is_array($value) || is_object($value)) ? object_to_array($value) : $value;
+        }
+        return $result;
+    }
+
+    public function load_more(Request $request,$id){
+        #print "<pre>";
+        // print_r($_GET);
+        // exit;
+        $idexp              =explode("-",$id);
+        $cari_materi        =Input::get('cari_materi');
+        $_token             =Input::get('_token');
+        $cari_filter        =Input::get('cari_filter');
+        $page               =Input::get('page') ? Input::get('page') : 2;
+        $offset             = ($page-1) * $this->paging ;
+        
+        #print $page; exit;
+        #DB::enableQueryLog();
+        $query  = DB::table($this->table_pengetahuan)
+                ->select(
+                    $this->table_pengetahuan.".*",
+                    $this->table_pengetahuan_category.".*",
+                )
+                ->leftJoin($this->table_pengetahuan_category, $this->table_pengetahuan_category.'.catId', '=', $this->table_pengetahuan.'.catId');
+        if(Input::get('cari_materi')){
+            $query=$query->where(function($query){
+                $query=$query->where('pgTitle', 'like', '%'.Input::get('cari_materi').'%');
+                $query=$query->orWhere('pgDescription', 'like', '%'.Input::get('cari_materi').'%');
+            });
+        }
+        if($cari_filter){
+            if($cari_filter=="0-semua"){
+
+            }else{
+                $query=$query->orWhere('catPermalink', Input::get('cari_filter'));
+            }
+        }
+        $query      =$query->where('pgTimePost',"<",date('Y-m-d H:i:s'))->orderBy('pgId', 'DESC');    
+        $count_all  =$query->count();      
+        $query=$query->offset($offset)->limit($this->paging)->get();
+        #$query_log = DB::getQueryLog();
+        // print "<pre>";
+        // print_r($query);
+        // exit;
+        $no=0;
+        $data_return=array();
+        foreach($query as $key=>$val){
+            $data_return[$no]=array(                
+                            "title"     =>$val->pgTitle,
+                            "img"       =>asset('storage/images/assets_pengetahuan/'.$val->pgImage),
+                            "plink"     =>$val->pgPermalink,
+                            "url"       =>url("front/materi/".$val->pgPermalink),
+                            "estimate"  =>$val->pgEstimation,
+                            "type"      =>$val->pgType,
+                            "comments"  =>$this->get_count($val->pgId),
+                            "star"      =>"4.7",
+                            "view"      =>$val->pgViewed,
+                            "cat"       =>$val->catName,
+                            "caturl"    =>url("front/materi/?cari_filter[]=".$val->catPermalink),
+                            "typec"     =>$this->get_typecontent($val->pgId),
+                            );
+            $no++;
+        }
+        $page                           =$page+1;
+        if($_token){        $_token     ="_token=".$_token;}
+        if($cari_materi){   $cari_materi="&cari_materi=".$cari_materi;}
+        if($cari_filter){   $cari_filter="&cari_filter[]=".$cari_filter;}
+        if($page){          $page       ="&page=".$page;}
+        
+
+        $data_return['success']     =$data_return;
+        #$data_return['query_log']   =$query_log;
+        $data_return['count']       =$query->count();
+        $data_return['count_all']   =$count_all;
+        $data_return['return_url']  =route('materi.index')."?".($_token ? $_token: '').($cari_materi ? $cari_materi: '').($cari_filter ?$cari_filter: '').($page ?$page: '');
+        return response()->json($data_return);
+    }
+
+    
 
 }

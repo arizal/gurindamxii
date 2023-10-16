@@ -157,11 +157,57 @@
                 <h2 style="font-weight:bold">{{$data['data']->pgTitle}}</h2>
             </div>
             <div style="display:block; float:left;width:100%;">
-                <span class="label label-xlg label-purple arrowed">&nbsp; {{$data['data']->pgType}} &nbsp;</span>
+                <span class="label label-xlg label-danger arrowed">&nbsp; {{$data['data']->pgType}} &nbsp;</span>
                 <span style="font-size:16px;">{{$data['data']->catName}}</span>
             </div>
             <div style="display:block; float:left;width:100%;font-size:11px;">
-                {{date("d M Y H:i:s",strtotime($data['data']->pgTimePost))}} WIB
+                <div style="float:left">
+                    {{date("d M Y H:i:s",strtotime($data['data']->pgTimePost))}} WIB
+                </div>
+                <div style="float:right" class="social">
+                    <style type="text/css">
+                        .social a{
+                            margin: 0 3px;
+                            border-radius: 4px;
+                            min-width: 36px;
+                            height: 36px;
+                            background: rgba(255, 255, 255, 0.8);
+                            transition: ease-in-out 0.3s;
+                            color: #484848;
+                            display: inline-flex;
+                            justify-content: center;
+                            align-items: center;
+                            font-size:18px;
+                            border:1px solid #C78400;
+                            padding:0px 5px 0px 5px;
+                        }
+                        .social a:hover{
+                            cursor:pointer;
+                            background-color:#FEB652;
+                        }
+                        a.btn_dtl{
+                            color:#C78400;
+                        }
+                        a.btn_dtl:hover{
+                            color:#7d6026;
+                        }
+                    </style>
+                    <?php /*    
+                    <button class="btn btn-xs btn-white btn-warning btn-bold">
+                        <i class="ace-icon fa fa-list bigger-120 red2"></i>
+                    </button>
+                    <button class="btn btn-xs btn-white btn-warning btn-bold">
+                        <i class="ace-icon fa fa-thumbtack bigger-120 red2"></i>
+                    </button>
+                    <button class="btn btn-xs btn-white btn-warning btn-bold">
+                        <i class="ace-icon fa fa-heart bigger-120 red2"></i>
+                    </button> */ ?>
+                    <a class="btn_dtl" title="Tambahkan ke Daftar Baca" onClick="addItemToCart('{{$data['data']->pgPermalink}}','read_later')"><i class="fa-solid fa-list"></i> &nbsp;Baca Nanti</a>
+                    <?php /*<a style="<?php #{{$pgval->pnId ? 'background:red; color:white' : ''}} ?>" class="btn_dtl done_already" title="Tandai Materi ini" onClick="addItemToCart('{{$data['data']->pgPermalink}}','pin')"><i class="fa-solid fa-thumbtack"></i></a>*/ ?>
+                    <a style="<?php #{{$pgval->lkId ? 'background:red; color:white' : ''}} ?>" class="btn_dtl" title="Sukai Materi ini" onClick="addItemToCart('{{$data['data']->pgPermalink}}','like')""><i class="fa-solid fa-heart"></i> &nbsp;Sukai</a>
+                </div>
+                
+                
             </div>
         </div>
     </section><!-- End Breadcrumbs -->
@@ -718,10 +764,12 @@
                     <div class="mn-social-bottom-c">
                         <a class="mn-social-bottom" href="https://www.facebook.com/sharer/sharer.php?u={{url('front/materi/'.$data['data']->pgPermalink)}}" target="_blank"><i class="fa fa-facebook"></i></a>
                         <a class="mn-social-bottom" href="http://twitter.com/share?text={{$data['data']->pgTitle}}&url={{url('front/materi/'.$data['data']->pgPermalink)}}&hashtags=" target="_blank"><i class="fa fa-twitter"></i></a>
-                        <a class="mn-social-bottom"><i class="fa fa-linkedin"></i></a>
-                        <a class="mn-social-bottom"><i class="fa fa-google-plus"></i></a>
-                        <a class="mn-social-bottom"><i class="fa fa-pinterest-p"></i></a>
-                        <a class="mn-social-bottom" onclick="$('#mn-social-bottom-hidden').slideToggle();$('.fa-plus').toggleClass('mn-social-r')"><i class="fa fa-plus"></i></a>
+                        <a class="mn-social-bottom" href="https://www.linkedin.com/shareArticle?url={{url('front/materi/'.$data['data']->pgPermalink)}}&title={{$data['data']->pgTitle}}&source={{url('front/materi/'.$data['data']->pgPermalink)}}" target="_blank"><i class="fa fa-linkedin"></i></a>
+                        <a class="mn-social-bottom" href="mailto:?subject={{$data['data']->pgTitle}}&body={{strip_tags($data['data']->pgDescription)}}. kunjungi Alamat ini {{url('front/materi/'.$data['data']->pgPermalink)}}" target="_blank"><i class="fa fa-envelope"></i></a>
+                        <a class="mn-social-bottom" href="http://pinterest.com/pin/create/button/?url={{url('front/materi/'.$data['data']->pgPermalink)}}&media={{asset('storage/images/assets_pengetahuan/'.$data['data']->pgImage)}}&description={{url('front/materi/'.$data['data']->pgTitle)}}" target="_blank"><i class="fa fa-pinterest-p"></i></a>
+                        <?php /*<a class="mn-social-bottom" onclick="$('#mn-social-bottom-hidden').slideToggle();$('.fa-plus').toggleClass('mn-social-r')"><i class="fa fa-plus"></i></a>*/ ?>
+                        
+                        <?php /*
                         <div id="mn-social-bottom-hidden">
                             <a class="mn-social-bottom"><i class="fa fa-tumblr"></i></a>
                             <a class="mn-social-bottom"><i class="fa fa-get-pocket"></i></a>
@@ -729,7 +777,7 @@
                             <a class="mn-social-bottom"><i class="fa fa-reddit"></i></a>
                             <a class="mn-social-bottom"><i class="fa fa-envelope"></i></a>
                             <a class="mn-social-bottom"><i class="fa fa-delicious"></i></a>
-                        </div>
+                        </div>*/ ?>
                     </div>
                     <?php /*
                     <svg xmlns="http://www.w3.org/2000/svg" version="1.1">
@@ -751,9 +799,10 @@
             <div class="col-lg-12 col-md-12 d-flex align-items-stretch" style="margin-bottom:10px;  ">
                 <span style="font-weight:bold; border-bottom:1px solid #ccc; width:100%">Komentar :</span><br>
             </div>
+            <?php /*
             <div class="alert alert-danger" role="alert">
                 Anda harus Login terlebih dahulu apabila ingin memberikan komentar..
-            </div>
+            </div> */ ?>
             <!-- START COMMENTS -->
             <div class="container">
                 <form class="form-block post_comments" action="{{route('materi.post_comments',$data['data']->pgPermalink)}}" method="POST" id="post_comments">
@@ -761,7 +810,7 @@
                     <div class="row">
                         <div class="col-xs-12">									
                             <div class="form-group">
-                                <textarea class="form-input summernote" name="komentar" required="" placeholder="Ketikkan Komentar Anda di Sini" style="color:black"></textarea>
+                                <textarea class="form-input summernote" name="komentar" required="" placeholder="Ketikkan Komentar Anda di Sini" style="color:black"><p></p></textarea>
                             </div>
                         </div>
                         <div style="text-align:right !important; padding-top:10px;">
@@ -773,7 +822,7 @@
                     </div>
                 </form>
                 <!-- END  FORM KOMENTAR -->
-                <div class="row">
+                <div class="row" id="kolom_komentar">
                     <div class="col-md-12">
                         @foreach($data['komentar'] as $cmkey=>$cmval)
                         @php

@@ -38,6 +38,10 @@ class HubungiAdminController extends Controller
 
         $data=array(
             "data"=>$data_get,
+            "new_ajax"=>"
+                var windowSize = $(window).width();
+                //alert(windowSize);
+            ",
         );
         return view('front::hubungi_admin.index',['data'=>$data]);
     }

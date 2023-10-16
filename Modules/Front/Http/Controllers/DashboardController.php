@@ -119,10 +119,14 @@ class DashboardController extends Controller
                                 ->orderby($this->table_pengetahuan_read.".created_at","DESC")
                                 ->get();
         $jumlah_content=0;
-        $jumlah_readcon=0;                        
+        $jumlah_readcon=0; 
+        $jumlah_readmat=0;                       
         foreach($querycmateri as $kymt=>$kyvl){
             $jumlah_content=$jumlah_content+$kyvl->readContent;
             $jumlah_readcon=$jumlah_readcon+$kyvl->readActual;
+            if($kyvl->readActual == $kyvl->readContent){
+                $jumlah_readmat=$jumlah_readmat+1;
+            }
         }
 
         $cmateri    =$querycmateri->count();
@@ -135,7 +139,7 @@ class DashboardController extends Controller
 
         $data_read=array(
             "total_materi"=>$cmateri,
-            "total_persen"=>$jumlah_readcon>0 ? ceil(($jumlah_readcon/$jumlah_content)*100) : 0,
+            "total_persen"=>$jumlah_readmat>0? ($jumlah_readmat/count($querycmateri)*100) : 0 ,#$jumlah_readcon>0 ? ceil(($jumlah_readcon/$jumlah_content)*100) : 0,
             "materi"      =>$querycmateri,
         );
         $data=array(

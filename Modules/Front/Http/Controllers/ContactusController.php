@@ -57,49 +57,65 @@ class ContactusController extends Controller
         // print "<hr>";
         // echo "IP Address of client " . getenv("REMOTE_ADDR");
 
+        $validator = \Validator::make($request->all(), [
+            'cntitle'=>'required',
+            'cnname'=>'required',
+            'cnhp' => 'required|numeric',
+            'cnemail'=>'required|email',
+            'cntype'=>'required',
+            'cnmessage'=>'required',
+        ], [
+            'cntitle.required' => 'Kolom Judul Wajib Di isi.',
+            'cnname.required' => 'Kolom Nama Wajib Di isi.',
+            'cnhp.required' => 'Kolom No HP Wajib Di isi.',
+            'cnhp.numeric' => 'Kolom No HP harus Berisi Angka.',
+            'cntype.required' => 'Kolom Jenis Wajib Di isi.',
+            'cnemail.required' => 'Kolom Email Wajib Di isi.',
+            'cnmessage.required' => 'Kolom Keterangan Wajib Di isi.',
+        ]);
 
-        $details = [
-            'from' => [
-                    'address' => 'gurindam@gmail.com', 
-                    'name' => 'Gurindam Kanreg XII'],
 
-            'nama' => $request->cnname,
-            'HP' => $request->cnhp,
-            'isi Pesan' => $request->cnmessage,
-            
-        ];
+        if ($validator->fails()){
+            print "<br>";
+            foreach($validator->errors()->all() as $errx){
+                print $errx."<br>";
+            }
+            #return response()->json(['errors'=>$validator->errors()->all()]);
+            exit;
+        }else{
+            $details = [
+                'from' => [
+                        'address' => 'gurindam@gmail.com', 
+                        'name' => 'Gurindam Kanreg XII'],
 
-        $send_mail=Mail::to($request->cnemail)->send(new MySendMail($details));
-        if($send_mail){
-            #cuId 	cuTitle 	cuPermalink 	cuParent 	cuHP cuEmail	cuType 	cuMessage 	id_user 	created_at 	updated_at 	
-            #nextid
-            /*
-            [_token] => VrStcIkDdbLZFKrRKL5Ft1PhO2D5gRG0LdKqdEv3
-            [cnname] => arizal nur rohman
-            [cnemail] => arizalnurrohman13@gmail.com
-            [cnhp] => 085265266005
-            [cntype] => Kritik
-            [cntitle] => ini test kiri email dari Gurindam ya
-            [cnmessage] => isi pesan tek*/
-            $cu_nextid=$this->nextid("contact_us","cuId");
-            $cu_title = $cu_nextid."-".\Str::slug($request->cntitle);
-            $payload=array(
-                "cuId"          =>$cu_nextid,
-                "cuTitle"       =>$request->cntitle,
-                "cuPermalink"   =>$cu_title,
-                "cuParent"      =>0,
-                "cuName"        =>$request->cnname,
-                "cuHP"          =>$request->cnhp,
-                "cuEmail"       =>$request->cnemail,
-                "cuType"        =>$request->cntype,
-                "cuMessage"     =>$request->cnmessage,
-                "id_user"       =>0,
-                "cuRead"        =>"unread",
-                "created_at"    =>date("Y-m-d H:i:s")
-            );
-            $save_contactus=DB::table("contact_us")->insert($payload);
+                'nama' => $request->cnname,
+                'HP' => $request->cnhp,
+                'isi Pesan' => $request->cnmessage,
+                
+            ];
 
-            print "OK";
+            $send_mail=Mail::to($request->cnemail)->send(new MySendMail($details));
+            if($send_mail){
+                $cu_nextid=$this->nextid("contact_us","cuId");
+                $cu_title = $cu_nextid."-".\Str::slug($request->cntitle);
+                $payload=array(
+                    "cuId"          =>$cu_nextid,
+                    "cuTitle"       =>$request->cntitle,
+                    "cuPermalink"   =>$cu_title,
+                    "cuParent"      =>0,
+                    "cuName"        =>$request->cnname,
+                    "cuHP"          =>$request->cnhp,
+                    "cuEmail"       =>$request->cnemail,
+                    "cuType"        =>$request->cntype,
+                    "cuMessage"     =>$request->cnmessage,
+                    "id_user"       =>0,
+                    "cuRead"        =>"unread",
+                    "created_at"    =>date("Y-m-d H:i:s")
+                );
+                $save_contactus=DB::table("contact_us")->insert($payload);
+
+                print "OK";
+            }
         }
 
         #return "Email telah dikirim!";

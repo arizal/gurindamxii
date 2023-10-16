@@ -51,7 +51,9 @@
                                 <h5 class="widget-title smaller">Daftar Materi yang ditandai</h5>
 
                                 <div class="widget-toolbar">
-                                    <span class="badge badge-danger">Alert</span>
+                                    <span class="badge badge-danger" style="border-radius:0px;">
+                                        &nbsp;
+                                    </span>
                                 </div>
                             </div>
 

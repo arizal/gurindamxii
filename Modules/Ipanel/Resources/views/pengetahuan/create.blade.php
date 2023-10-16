@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="page-header">
-    <h1>Kategori Pembelajaran
+    <h1>Materi Pembelajaran
         <small>
             <i class="ace-icon fa fa-angle-double-right"></i> Tambah 
         </small>

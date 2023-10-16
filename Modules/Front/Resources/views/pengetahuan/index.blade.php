@@ -180,9 +180,12 @@
                                     <div class="input-group-append"> <!-- Grupkan tombol Filter dan Cari -->
                                         <?php /*<button type="button" class="btn btn-primary filter-button" id="filterButton">
                                             <i class="fas fa-filter"></i> <!-- Ikon filter -->
-                                        </button>*/ ?>
+                                        </button> */ ?>
                                         <button type="submit" class="btn btn-primary filter-button">
                                             <i class="fas fa-search"></i> <!-- Ikon pencarian -->
+                                        </button>
+                                        <button type="reset" class="btn btn-primary filter-button" id="resetButton">
+                                            <i class="fas fa-refresh"></i>
                                         </button>
                                     </div>
                                 </div>
@@ -201,7 +204,7 @@
                                     <div class="form-group">
                                         <!-- Tambahkan class "custom-select" dan "custom-select-lg" untuk membuat Combo Box dengan Bootstrap -->
                                         <select multiple="" name="cari_filter[]" class="chosen-select form-control tag-input-style" id="form-field-select-4" data-placeholder="Pilih Nama Kategori...">
-                                            @foreach($data_pengetahuan['category'] as $catid=>$catname)
+                                            @foreach($data['category'] as $catid=>$catname)
                                                 @php 
                                                     $selected="";
                                                     if(app('request')->input('cari_filter')){
@@ -298,17 +301,52 @@
     <?php #<section class="team">; ?>
         <div class="container">
             <div class="section-title">
-                <p>Daftar Materi Pembelajaran <?php #print_r($data_pengetahuan) ?></p>
+                <p>Daftar Materi Pembelajaran <?php #print_r($data) ?></p>
+                <div style="margin-bottom:20px;text-align:center" id="btn_cat">
+                    <?php /*<button class="btn btn-sm btn-warning"  style="margin-bottom:5px;">
+                        <span class="bigger-110 no-text-shadow">Semua</span>
+                    </button>*/?>
+                    <style type="text/css">
+                        .radio_button{
+                            pointer-events: none;
+                            text-decoration:none;
+                            position: absolute;
+                            clip: rect(0,0,0,0);
+                        }
+                    </style>
+                    <?php /*<button style="margin-bottom:5px;" type="button" class="btn btn-sm btn-warning" data-toggle="button" aria-pressed="true">Semua</button>*/ ?>
+                    @php
+                        $bgbutton=array("primary","blue","warning","purple","info","danger","pink","inverse","yellow","grey");
+                    @endphp
+                    <?php /*<div data-toggle="buttons" class="btn-group">*/ ?>
+                        <label id="btn_0" class="btn_category btn btn-warning btn-sm" style="margin-bottom:5px;">
+                            <input type="radio" class="radio_button kategorinama" name="kategorinama" value="" OnClick="filterCategory('0-semua')">
+                            Semua
+                        </label>
+                        @foreach($data['category'] as $catid=>$catname)
+                            <?php /*<button class="btn btn-sm btn-" style="margin-bottom:5px;">
+                                <span class="bigger-110 no-text-shadow">{{$catname->catName}}</span>
+                            </button> */ ?>
+                            <?php /* <button style="margin-bottom:5px;" type="button" class="btn btn-sm" data-toggle="button" aria-pressed="true">{{$catname->catName}}</button>*/ ?>
+                            <label id="btn_{{$catname->catId}}" class="btn_category btn btn-sm" style="margin-bottom:5px;background-color:yellow"><?php #alert($(this).val())?>
+                                <input class="radio_button kategorinama" type="radio" value="{{$catname->catPermalink}}" name="kategorinama" OnClick="filterCategory('{{$catname->catPermalink}}')">
+                                {{$catname->catName}}
+                            </label>
+                        @endforeach
+                    <?php /*</div>*/ ?>
+
+                </div>
+                
                 @if(app('request')->input('cari_materi') or app('request')->input('cari_filter'))
                 <div class="row" style="background-color:#CCCCCC;  margin-bottom:20px; margin-left:2px; margin-right:5px;">
                     <div class="col-lg-2 col-sm-12" style="font-size:16px; padding:15px 15px 3px 15px;font-weight:bold;">Pencarian Materi </div>
                     <div class="col-lg-10 col-sm-12" style="font-size:14px;background-color:#fgt4;padding:15px 15px 3px 15px;">: {{ app('request')->input('cari_materi') }} </div>
-                    <?php /*<div class="col-lg-2 col-sm-12" style="font-size:16px; padding:0px 15px 3px 15px;font-weight:bold;">Filter Kategori </div>
-                    <div class="col-lg-10 col-sm-12" style="font-size:14px;background-color:#fgt4;padding:0px 15px 3px 15px;">: {{ app('request')->input('cari_filter') ? implode(",",app('request')->input('cari_filter')): '' }} </div> */ ?>
-                    <div class="col-lg-12 col-sm-12" style="font-size:14px;background-color:#fgt4;padding:0px 15px 15px 15px;font-weight:bold;">Total data ditampilkan ({{$data_pengetahuan['data_count']}}) </div>
+                    <div class="col-lg-2 col-sm-12" style="font-size:16px; padding:0px 15px 3px 15px;font-weight:bold;">Filter Kategori </div>
+                    <div class="col-lg-10 col-sm-12" style="font-size:14px;background-color:#fgt4;padding:0px 15px 3px 15px;">: {{ app('request')->input('cari_filter') ? implode(",",app('request')->input('cari_filter')): '' }} </div>
+                    <div class="col-lg-12 col-sm-12" style="font-size:14px;background-color:#fgt4;padding:0px 15px 15px 15px;font-weight:bold;">Total data ditampilkan ({{$data['data_count']}}) </div>
                 </div>
                 @endif
-                <div class="row">
+                <div class="row data_materi">
                     <style>
                         a.btn_dtl{
                             color:#C78400;
@@ -316,7 +354,7 @@
                         a.btn_dtl:hover{
                             color:#7d6026;
                     </style>
-                    @foreach($data_pengetahuan['data'] as $pgkey=>$pgval)
+                    @foreach($data['data'] as $pgkey=>$pgval)
                         @php
                         $content_type = Modules\Front\Http\Controllers\FrontController::get_typecontent($pgval->pgId);
                         $comments     = Modules\Front\Http\Controllers\FrontController::get_count($pgval->pgId);
@@ -329,7 +367,7 @@
                                 
                                 <div class="social" style="display:block; width:100%; background-color:#ccc; padding:5px 0px;">
                                     <a class="btn_dtl" title="Tambahkan ke Daftar Baca" onClick="addItemToCart('{{$pgval->pgPermalink}}','read_later')"><i class="fa-solid fa-list"></i></a>
-                                    <a <?php /* style="background:red; color:white" */ ?> class="btn_dtl done_already" title="Tandai Materi ini" onClick="addItemToCart('{{$pgval->pgPermalink}}','pin')"><i class="fa-solid fa-thumbtack"></i></a>
+                                    <?php /*<a style="<?php #{{$pgval->pnId ? 'background:red; color:white' : ''}} ?>" class="btn_dtl done_already" title="Tandai Materi ini" onClick="addItemToCart('{{$pgval->pgPermalink}}','pin')"><i class="fa-solid fa-thumbtack"></i></a>*/ ?>
                                     <a class="btn_dtl" title="Sukai Materi ini" onClick="addItemToCart('{{$pgval->pgPermalink}}','like')"><i class="fa-solid fa-heart"></i></a>
                                 </div>                            
                             </div>
@@ -339,9 +377,9 @@
                                     <span style="color:#fff;margin-left:-5px;"><i class="fa-solid fa-clock"></i> : {{$pgval->pgEstimation}} menit</span>
                                 </div>
                                 <div style="float:right">    
-                                    <a href=""><i class="fa-regular fa-comment"></i> {{$comments}}</a>
-                                    <a href=""><i class="fa-regular fa-star"></i> {{rand(1,5)}}</a>
-                                    <a href=""><i class="fa-regular fa-eye"></i> {{$pgval->pgViewed}}</a>
+                                    <a style="color:#FFD584"><i class="fa-regular fa-comment"></i> {{$comments}}</a>
+                                    <a style="color:#FFD584"><i class="fa-regular fa-star"></i> {{rand(1,5)}}</a>
+                                    <a style="color:#FFD584"><i class="fa-regular fa-eye"></i> {{$pgval->pgViewed}}</a>
                                 </div>    
                             </div>
                             <div class="" style="font-size:20px; padding:5px;text-align:right">
@@ -370,7 +408,7 @@
                     @endforeach
                 </div>
                 <div style="text-align:center; padding-bottom:10px;">
-                    <input  class="btn btn-warning pull-right" type="button" name="comment" value="Tampilkan Lebih Banyak"  style="color:black;width:250px; margin-top:10px;">
+                    <input  class="btn btn-warning pull-right load_more_button" type="button" name="comment" value="Tampilkan Lebih Banyak"  style="color:black;width:250px; margin-top:10px;" OnClick="load_more({{app('request')->input('page')?app('request')->input('page') : 0}})")>
                 </div> 
             </div>
         </div>    

@@ -11,15 +11,17 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Validator;
 use App\Helper\ImageManager;
 
+use Spatie\Permission\Traits\HasRoles;
+
 class PengetahuanController extends Controller
 {
     use ImageManager;
+    use HasRoles;
+
     public $table_pengetahuan           ="pengetahuan";
     public $table_pengetahuan_content   ="pengetahuan_content";
     public $table_pengetahuan_category  ="pengetahuan_category";
     public $table_pengetahuan_comments  ="pengetahuan_comment";
-
-    
 
     public $assets_pengetahuan          ="images/assets_pengetahuan/";
     public $paging                      =10;
@@ -29,6 +31,8 @@ class PengetahuanController extends Controller
      */
     public function index()
     {
+        // print_r($user->hasRole('writer'));
+        // exit;
         $query      = DB::table($this->table_pengetahuan);
         if(isset($_GET['search'])){
             $query         = $query->where('pgTitle',"like","%".$_GET['search']."%");
