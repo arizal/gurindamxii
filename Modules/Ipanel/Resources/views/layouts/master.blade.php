@@ -375,10 +375,13 @@
 								<li class="divider"></li>
 
 								<li>
-									<a href="<?php print url('/logout'); ?>">
+									<a href="<?php print url('/logout'); ?>"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
 										<i class="ace-icon fa fa-power-off"></i>
 										Logout
 									</a>
+									<form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+										@csrf
+									</form>
 								</li>
 							</ul>
 						</li>

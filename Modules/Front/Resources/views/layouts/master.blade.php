@@ -95,7 +95,11 @@
                 <li><a href="{{url('/front/riwayat_baca')}}"><i class="fa fa-newspaper-o fa-lg"></i>Riwayat Baca</a></li>
                 <li><a href="{{url('/front/hubungi_admin')}}"><i class="fa fa-comments-o fa-lg"></i>Hubungi Admin</a></li>
                 <li><a href="{{url('/front/pengaturan')}}"><i class="fa fa-gear fa-lg"></i>Pengaturan</a></li>
-                <li><a href="{{url('/logout')}}"><i class="fa fa-key fa-lg"></i>Logout</a></li>
+                <li><a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fa fa-key fa-lg"></i>Logout</a>
+                      <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+                          @csrf
+                      </form> 
+                </li>
               </ul>
             </li>
             @endif
