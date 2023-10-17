@@ -11,15 +11,18 @@
 |
 */
 
-Route::prefix('ipanel')->group(function() {
-    Route::get('/', 'IpanelController@index');
-});
+
 
 // Route::group(['prefix'=>'ipanel'],function(){
 //     Route::get('/','IpanelController@index');
 // });
 use App\Http\Controllers\BooksController;
+Route::prefix('ipanel')->namespace('\Modules\Ipanel\Http\Controllers')->middleware(['auth'])->group(function() {
+    Route::get('/', 'IpanelController@index');
+});
 Route::prefix("ipanel")->namespace('\Modules\Ipanel\Http\Controllers')->middleware(['auth'])->group(function(){
+    
+    
     Route::resource('categoripembelajaran','CategoriPembelajaranController');
     Route::resource('mpembelajaran','PembelajaranController');
 

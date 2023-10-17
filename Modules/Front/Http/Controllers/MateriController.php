@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Modules\Ipanel\Entities\PengetahuanCategoryModel;
 use Modules\Ipanel\Entities\PengetahuanModel;
 use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Auth;
 
 class MateriController extends Controller
 {
@@ -28,6 +29,28 @@ class MateriController extends Controller
      * Display a listing of the resource.
      * @return Renderable
      */
+    public static function getLogin()
+    {
+        if (Auth::check()) {
+            if(auth()->user()->hasRole('user')=='user'){
+                $log_data=array(
+                    "ID"        =>auth()->user()->id,
+                    "NAME"      =>auth()->user()->name,
+                    "EMAIL"     =>auth()->user()->email,
+                    "ROLES"      =>array(
+                        "ID"    =>auth()->user()->role,
+                    "NAME"  =>(auth()->user()->hasRole('user')=='user' ? 'user' : ''),
+                    ),
+                    "ID"        =>auth()->user()->id,
+                );
+                return $log_data;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
     public function index()
     {
         /*
@@ -86,6 +109,11 @@ class MateriController extends Controller
             });
             
         }
+        #IF NOT LOGIN ##################################################################################
+        // if (!Auth::check()) {
+        //     $query          =$query->where("pgType","Public");
+        // }
+        #END IF NOT LOGIN ##############################################################################
         $query=$query->where('pgTimePost',"<",date('Y-m-d H:i:s'))->orderBy('pgId', 'DESC');        
         $query=$query->paginate($this->paging);
         #$query = DB::getQueryLog();
@@ -133,16 +161,26 @@ class MateriController extends Controller
      */
     public function show(Request $request,$id)
     {
+        ######################################################################################################################
         ##TEST USER LOGIN SESSION...........................................
+        // $CHECK_LOGIN=$this->getLogin();
+        // $id_user    =$CHECK_LOGIN['ID'];
+
+        #OLD
+        /* 
         $USER_LOGIN = [
             "ID"=>5,
             "NAME"=>"Alesha Farzana Rohman",
             "AVATAR"=>"https://bootdey.com/img/Content/avatar/avatar5.png",
             "NIP"=>"199002132023211016",  
-        ];
-        $request->session()->put('USER_LOGIN', $USER_LOGIN);
+        ];*/
+        #$request->session()->put('USER_LOGIN', $USER_LOGIN);
+        #$request->session()->put('USER_LOGIN',$CHECK_LOGIN);
         ##TEST USER LOGIN SESSION...........................................
-        
+        ######################################################################################################################
+        // print "<pre>";
+        // print_r(session()->get('USER_LOGIN'));
+        // exit;
         $data_get = DB::table($this->table_pengetahuan)
                             #pgType 	pgTitle 	pgPermalink 	pgTimePost 	pgDescription 	pgEstimation	
                             ->select($this->table_pengetahuan.".pgId",$this->table_pengetahuan.".pgType",$this->table_pengetahuan.".pgTitle",$this->table_pengetahuan.".pgPermalink",$this->table_pengetahuan.".pgTimePost",$this->table_pengetahuan.".pgDescription",$this->table_pengetahuan.".pgEstimation",$this->table_pengetahuan.".pgViewed",$this->table_pengetahuan.".pgImage",
@@ -181,24 +219,26 @@ class MateriController extends Controller
         // print "IP:".$ip_access."<br>".$ip_address_access;
         // exit;
         #CHECK LOG----------------------------------------------------------------
-        $check_log = DB::table($this->table_pengetahuan_activity)
-                            ->where('paIP', $ip_access)
-                            ->where('id_user', session()->get('USER_LOGIN.ID'))
-                            ->where('refId', $id)
-                            ->where('created_at',"LIKE",date('Y-m-d')."%")
-                            ->count();
-        if($check_log==0){                    
-            $payload_activity=[
-                'paIP'            => $ip_access,
-                'id_user'         => session()->get('USER_LOGIN.ID'),
-                'paType'          => 'read',
-                'paModule'        => request()->segment(2),
-                'refId'           => $id,
-                'created_at'      => date("Y-m-d H:i:s"),
-            ];
+        #if(session()->get('USER_LOGIN')){
+            $check_log = DB::table($this->table_pengetahuan_activity)
+                                ->where('paIP', $ip_access)
+                                ->where('id_user', (session()->get('USER_LOGIN.ID')? session()->get('USER_LOGIN.ID') : 0))
+                                ->where('refId', $id)
+                                ->where('created_at',"LIKE",date('Y-m-d')."%")
+                                ->count();
+            if($check_log==0){                    
+                $payload_activity=[
+                    'paIP'            => $ip_access,
+                    'id_user'         => (session()->get('USER_LOGIN.ID')? session()->get('USER_LOGIN.ID') : 0),
+                    'paType'          => 'read',
+                    'paModule'        => request()->segment(2),
+                    'refId'           => $id,
+                    'created_at'      => date("Y-m-d H:i:s"),
+                ];
 
-            $save_reply=DB::table($this->table_pengetahuan_activity)->insert($payload_activity);
-        }
+                $save_reply=DB::table($this->table_pengetahuan_activity)->insert($payload_activity);
+            }
+        #}
         #END OF INSERT LOG ACTIVITY.................................................. 
         $data_om    =DB::table($this->table_pengetahuan)
                             ->select($this->table_pengetahuan.".pgId",$this->table_pengetahuan.".pgType",$this->table_pengetahuan.".pgTitle",$this->table_pengetahuan.".pgPermalink",$this->table_pengetahuan.".pgTimePost",$this->table_pengetahuan.".pgEstimation",$this->table_pengetahuan.".pgImage",
@@ -437,6 +477,12 @@ class MateriController extends Controller
     #FOR COMMENTS
     public function post_comments(Request $request,$getid)
     {
+        // $CHECK_LOGIN=$this->getLogin();
+        // $id_user    =$CHECK_LOGIN['ID'];
+        // print "<pre>";
+        // print_r(session()->get('USER_LOGIN'));
+        // exit;
+
         $validator = \Validator::make($request->all(), [
             'komentar'=>'required',
             'g-recaptcha-response' => 'recaptcha',
@@ -797,6 +843,9 @@ class MateriController extends Controller
                 $query=$query->orWhere('catPermalink', Input::get('cari_filter'));
             }
         }
+        // if (!Auth::check()) {
+        //     $query          =$query->where("pgType","Public");
+        // }
         $query      =$query->where('pgTimePost',"<",date('Y-m-d H:i:s'))->orderBy('pgId', 'DESC');    
         $count_all  =$query->count();      
         $query=$query->offset($offset)->limit($this->paging)->get();

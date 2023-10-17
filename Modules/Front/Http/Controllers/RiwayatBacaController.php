@@ -24,13 +24,13 @@ class RiwayatBacaController extends Controller
     public function index(Request $request)
     {
         ##TEST USER LOGIN SESSION...........................................
-        $USER_LOGIN = [
-            "ID"    =>5,
-            "NAME"  =>"Alesha Farzana Rohman",
-            "AVATAR"=>"https://bootdey.com/img/Content/avatar/avatar5.png",
-            "NIP "  =>"199002132023211016",
-        ];
-        $request->session()->put('USER_LOGIN', $USER_LOGIN);
+        // $USER_LOGIN = [
+        //     "ID"    =>5,
+        //     "NAME"  =>"Alesha Farzana Rohman",
+        //     "AVATAR"=>"https://bootdey.com/img/Content/avatar/avatar5.png",
+        //     "NIP "  =>"199002132023211016",
+        // ];
+        // $request->session()->put('USER_LOGIN', $USER_LOGIN);
         
         $data_get = DB::table($this->table_pengetahuan_activity)
                         ->select($this->table_pengetahuan.".pgId",$this->table_pengetahuan.".pgImage",$this->table_pengetahuan.".pgType",$this->table_pengetahuan.".pgTitle",$this->table_pengetahuan.".pgPermalink",$this->table_pengetahuan.".pgTimePost",$this->table_pengetahuan.".pgDescription",$this->table_pengetahuan.".pgEstimation",$this->table_pengetahuan.".pgViewed",
@@ -82,12 +82,12 @@ class RiwayatBacaController extends Controller
     public function show()
     {
         ##TEST USER LOGIN SESSION...........................................
-        $USER_LOGIN = [
-            "ID"=>5,
-            "NAME"=>"Alesha Farzana Rohman",
-            "AVATAR"=>"https://bootdey.com/img/Content/avatar/avatar5.png",
-        ];
-        $request->session()->put('USER_LOGIN', $USER_LOGIN);
+        // $USER_LOGIN = [
+        //     "ID"=>5,
+        //     "NAME"=>"Alesha Farzana Rohman",
+        //     "AVATAR"=>"https://bootdey.com/img/Content/avatar/avatar5.png",
+        // ];
+        // $request->session()->put('USER_LOGIN', $USER_LOGIN);
 
         $data_get = DB::table($this->table_pengetahuan_activity)
                         ->select($this->table_pengetahuan.".pgId",$this->table_pengetahuan.".pgType",$this->table_pengetahuan.".pgTitle",$this->table_pengetahuan.".pgPermalink",$this->table_pengetahuan.".pgTimePost",$this->table_pengetahuan.".pgDescription",$this->table_pengetahuan.".pgEstimation",$this->table_pengetahuan.".pgViewed",

@@ -21,13 +21,13 @@ class HubungiAdminController extends Controller
     public function index(request $request)
     {
         ##TEST USER LOGIN SESSION...........................................
-        $USER_LOGIN = [
-            "ID"    =>5,
-            "NAME"  =>"Alesha Farzana Rohman",
-            "AVATAR"=>"https://bootdey.com/img/Content/avatar/avatar5.png",
-            "NIP "  =>"199002132023211016",
-        ];
-        $request->session()->put('USER_LOGIN', $USER_LOGIN);
+        // $USER_LOGIN = [
+        //     "ID"    =>5,
+        //     "NAME"  =>"Alesha Farzana Rohman",
+        //     "AVATAR"=>"https://bootdey.com/img/Content/avatar/avatar5.png",
+        //     "NIP "  =>"199002132023211016",
+        // ];
+        // $request->session()->put('USER_LOGIN', $USER_LOGIN);
         
         $data_get = DB::table($this->table_hubungi_admin)
                         ->select($this->table_hubungi_admin.".*")
@@ -75,13 +75,13 @@ class HubungiAdminController extends Controller
     public function store(Request $request)
     {
         ##TEST USER LOGIN SESSION...........................................
-        $USER_LOGIN = [
-            "ID"=>5,
-            "NAME"=>"Alesha Farzana Rohman",
-            "AVATAR"=>"https://bootdey.com/img/Content/avatar/avatar5.png",
-            "NIP"=>"199002132023211016",  
-        ];
-        $request->session()->put('USER_LOGIN', $USER_LOGIN);
+        // $USER_LOGIN = [
+        //     "ID"=>5,
+        //     "NAME"=>"Alesha Farzana Rohman",
+        //     "AVATAR"=>"https://bootdey.com/img/Content/avatar/avatar5.png",
+        //     "NIP"=>"199002132023211016",  
+        // ];
+        // $request->session()->put('USER_LOGIN', $USER_LOGIN);
 
         $payload_vadidator=[
             'hubungijudul'=>'required',
@@ -283,13 +283,13 @@ class HubungiAdminController extends Controller
     #FOR COMMENTS
     public function post_comments(Request $request,$getid)
     {
-        $USER_LOGIN = [
-            "ID"=>5,
-            "NAME"=>"Alesha Farzana Rohman",
-            "AVATAR"=>"https://bootdey.com/img/Content/avatar/avatar5.png",
-            "NIP"=>"199002132023211016",  
-        ];
-        $request->session()->put('USER_LOGIN', $USER_LOGIN);
+        // $USER_LOGIN = [
+        //     "ID"=>5,
+        //     "NAME"=>"Alesha Farzana Rohman",
+        //     "AVATAR"=>"https://bootdey.com/img/Content/avatar/avatar5.png",
+        //     "NIP"=>"199002132023211016",  
+        // ];
+        // $request->session()->put('USER_LOGIN', $USER_LOGIN);
         
         $validator = \Validator::make($request->all(), [
             'hapesan'=>'required',
@@ -363,7 +363,7 @@ class HubungiAdminController extends Controller
         
         $data_get   =$query->count();
         $data_last  = $query->orderBy('created_at', 'DESC')->limit(1)->first();
-        $data_unread=$query->where('haRead', 'n')->where('id_user', "!=",5)->count();
+        $data_unread=$query->where('haRead', 'n')->where('id_user', "!=",session()->get('USER_LOGIN.ID'))->count();
         /*
         print "<pre>";
         print "DATA_LAST:";

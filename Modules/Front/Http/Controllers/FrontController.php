@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\DB;
 use Modules\Ipanel\Entities\PengetahuanCategoryModel;
 use Modules\Ipanel\Entities\PengetahuanModel;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Session;
+
 
 class FrontController extends Controller
 {
@@ -27,12 +31,75 @@ class FrontController extends Controller
     public $paging                      =12;
 
     public $id_user                     =5;
+    // use AuthenticatesUsers;
     /**
      * Display a listing of the resource.
      * @return Renderable
      */
+    public static function getLogin()
+    {
+        if (Auth::check()) {
+            if(auth()->user()->hasRole('user')=='user'){
+                $log_data=array(
+                    "ID"        =>auth()->user()->id,
+                    "NAME"      =>auth()->user()->name,
+                    "EMAIL"     =>auth()->user()->email,
+                    "ROLES"      =>array(
+                        "ID"    =>auth()->user()->role,
+                    "NAME"  =>(auth()->user()->hasRole('user')=='user' ? 'user' : ''),
+                    ),
+                    "ID"        =>auth()->user()->id,
+                );
+                if(!session()->get('USER_LOGIN')){
+                    Session::put('USER_LOGIN',$log_data);
+                }
+                return $log_data;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+    }
     public function index(request $request)
     {
+        $AUTH_CHECK=$this->getLogin();
+        /*
+        if (Auth::check()) {
+            // if($user->hasRole('user')){
+            $id = auth()->user()->id;#Auth::user()->getId();
+
+            if( auth()->user()->role ==2) {   
+                print "User dia";
+            }else{
+                print "admin dia beroah";
+            }
+            print "<hr>";
+            print "user role id: ".auth()->user()->role;
+            print "<hr>";
+            if(\Illuminate\Support\Facades\Auth::user()->hasRole('user')  == 'user'){
+                print "user";
+            }
+            print "<hr>";
+            if(\Illuminate\Support\Facades\Auth::user()->hasRole('administrator')  == 'administrator'){
+                print "admin";
+            }
+            
+            print "<hr>";
+            print "udah ada user";
+            print "<hr>";
+            print "ID login ynya : ".$id;
+            print "<hr>";
+            print_r($this->getLogin());
+            print "<pre>";
+            #print_r(auth()->user());
+            print_r(auth()->user());
+            print "</pre>";
+            exit;
+        }else{
+            print "Belum ada user login";exit;
+        }
+        */
         #DB::enableQueryLog();
         $query              = DB::table($this->table_pengetahuan)
                                 ->select(
@@ -51,10 +118,14 @@ class FrontController extends Controller
                                 //->leftJoin($this->table_pengetahuan_like, $this->table_pengetahuan.'.pgId', '=', $this->table_pengetahuan_like.'.pgId')
                                 //->leftJoin($this->table_pengetahuan_pinned, $this->table_pengetahuan.'.pgId', '=', $this->table_pengetahuan_pinned.'.pgId')
 
-                                ->where('pgTimePost',"<",date('Y-m-d H:i:s'))
+                                ->where('pgTimePost',"<",date('Y-m-d H:i:s'));
 //->groupby($this->table_pengetahuan_content.'.pgId')
-                                ->orderBy('pgId', 'DESC')
-                                ->paginate($this->paging);
+        // if (!Auth::check()) {
+        //     $query          =$query->where("pgType","Public");
+        // }
+        $query              =$query->orderBy('pgId', 'DESC')->paginate($this->paging);
+
+                                
         // $query_log = DB::getQueryLog();
         // print "<pre>";
         // print_r($query_log); exit;                        

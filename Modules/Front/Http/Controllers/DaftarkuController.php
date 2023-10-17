@@ -92,13 +92,13 @@ class DaftarkuController extends Controller
     public function disukai(request $request)
     {
         ##TEST USER LOGIN SESSION...........................................
-        $USER_LOGIN = [
-            "ID"    =>5,
-            "NAME"  =>"Alesha Farzana Rohman",
-            "AVATAR"=>"https://bootdey.com/img/Content/avatar/avatar5.png",
-            "NIP "  =>"199002132023211016",
-        ];
-        $request->session()->put('USER_LOGIN', $USER_LOGIN);
+        // $USER_LOGIN = [
+        //     "ID"    =>5,
+        //     "NAME"  =>"Alesha Farzana Rohman",
+        //     "AVATAR"=>"https://bootdey.com/img/Content/avatar/avatar5.png",
+        //     "NIP "  =>"199002132023211016",
+        // ];
+        // $request->session()->put('USER_LOGIN', $USER_LOGIN);
         
         $data_get = DB::table($this->table_pengetahuan_like)
                         ->select($this->table_pengetahuan.".pgId",$this->table_pengetahuan.".pgImage",$this->table_pengetahuan.".pgType",$this->table_pengetahuan.".pgTitle",$this->table_pengetahuan.".pgPermalink",$this->table_pengetahuan.".pgTimePost",$this->table_pengetahuan.".pgDescription",$this->table_pengetahuan.".pgEstimation",$this->table_pengetahuan.".pgViewed",
@@ -122,13 +122,13 @@ class DaftarkuController extends Controller
     public function ditandai(request $request)
     {
         ##TEST USER LOGIN SESSION...........................................
-        $USER_LOGIN = [
-            "ID"    =>5,
-            "NAME"  =>"Alesha Farzana Rohman",
-            "AVATAR"=>"https://bootdey.com/img/Content/avatar/avatar5.png",
-            "NIP "  =>"199002132023211016",
-        ];
-        $request->session()->put('USER_LOGIN', $USER_LOGIN);
+        // $USER_LOGIN = [
+        //     "ID"    =>5,
+        //     "NAME"  =>"Alesha Farzana Rohman",
+        //     "AVATAR"=>"https://bootdey.com/img/Content/avatar/avatar5.png",
+        //     "NIP "  =>"199002132023211016",
+        // ];
+        // $request->session()->put('USER_LOGIN', $USER_LOGIN);
         
         $data_get = DB::table($this->table_pengetahuan_pinned)
                         ->select($this->table_pengetahuan.".pgId",$this->table_pengetahuan.".pgImage",$this->table_pengetahuan.".pgType",$this->table_pengetahuan.".pgTitle",$this->table_pengetahuan.".pgPermalink",$this->table_pengetahuan.".pgTimePost",$this->table_pengetahuan.".pgDescription",$this->table_pengetahuan.".pgEstimation",$this->table_pengetahuan.".pgViewed",

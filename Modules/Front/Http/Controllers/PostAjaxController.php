@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class PostAjaxController extends Controller
 {
@@ -15,6 +16,29 @@ class PostAjaxController extends Controller
     public $table_pengetahuan_pinned            ="pengetahuan_pinned";
     public $table_pengetahuan_readlist          ="pengetahuan_readlist";
     public $table_pengetahuan_readlist_content  ="pengetahuan_readlist_content";
+    
+    // public static function getLogin()
+    // {
+    //     if (Auth::check()) {
+    //         if(auth()->user()->hasRole('user')=='user'){
+    //             $log_data=array(
+    //                 "ID"        =>auth()->user()->id,
+    //                 "NAME"      =>auth()->user()->name,
+    //                 "EMAIL"     =>auth()->user()->email,
+    //                 "ROLES"      =>array(
+    //                     "ID"    =>auth()->user()->role,
+    //                 "NAME"  =>(auth()->user()->hasRole('user')=='user' ? 'user' : ''),
+    //                 ),
+    //                 "ID"        =>auth()->user()->id,
+    //             );
+    //             return $log_data;
+    //         }else{
+    //             return false;
+    //         }
+    //     }else{
+    //         return false;
+    //     }
+    // }
     /**
      * Display a listing of the resource.
      * @return Renderable
@@ -40,88 +64,111 @@ class PostAjaxController extends Controller
      */
     public function store(Request $request)
     {
-        $id_user    =5;
+        #$CHECK_LOGIN=$this->getLogin();
+        
         //
         // print "<pre>";
+        // print_r($CHECK_LOGIN);
         // print_r($_POST);
+        // exit;
         $data_pg    = DB::table($this->table_pengetahuan)->where('pgPermalink', $request->id)->first();
         if($request->type_options ==="like"){
             $note_response="Sukai";
-            $data_check = DB::table($this->table_pengetahuan_like)->where('pgId', $data_pg->pgId)->where('id_user', $id_user)->count();
-
-            $payload=[
-                'id_user'     => $id_user,
-                'pgId'        => $data_pg->pgId,
-                'created_at'  => date("Y-m-d H:i:s"),
-            ];
-            $table_name_for_saving=$this->table_pengetahuan_like;
         }
         if($request->type_options ==="pin"){
             $note_response="Tandai";
-            $data_check = DB::table($this->table_pengetahuan_pinned)->where('pgId', $data_pg->pgId)->where('id_user', $id_user)->count();
-            
-            $payload=[
-                'id_user'     => $id_user,
-                'pgId'        => $data_pg->pgId,
-                'created_at'  => date("Y-m-d H:i:s"),
-            ];
-            $table_name_for_saving=$this->table_pengetahuan_pinned;
         }
         if($request->type_options ==="read_later"){
             $note_response="Daftar Baca";
-
-            $data_check     = DB::table($this->table_pengetahuan_readlist)
-                                        ->leftJoin($this->table_pengetahuan_readlist_content, $this->table_pengetahuan_readlist.'.rlId', '=', $this->table_pengetahuan_readlist_content.'.rlId')
-                                        ->where($this->table_pengetahuan_readlist_content.'.pgId', $data_pg->pgId)
-                                        ->where($this->table_pengetahuan_readlist.'.id_user', $id_user)
-                                        ->count();
-            
-            $query_check    = DB::table($this->table_pengetahuan_readlist)
-                                        ->select("rlId")
-                                        ->where('id_user', $id_user);
-            $data_readlist_id=$query_check->first();
-            if($query_check->count()==0){
-                #rlId 	id_user 	rlTitle 	rlPermalink 	rlDescription 	created_at 	updated_at 	
-                $next_readlist=$this->nextid("pengetahuan_readlist","rlId");
-                $payload_readlist=[
-                    'rlId'          =>$next_readlist,
-                    'id_user'       =>$id_user,
-                    'rlTitle'       =>"BACA_NANTI",
-                    'rlPermalink'   =>$next_readlist."-".\Str::slug("BACA NANTI"),
-                    'rlDescription' =>'Baca Nanti Description',
-                    'created_at'    =>date("Y-m-d H:i:s"),
-                ];
-                $save_rltetc=DB::table($this->table_pengetahuan_readlist)->insert($payload_readlist);
-
-                $id_read_list=$next_readlist;
-            }else{
-                $id_read_list=$data_readlist_id->rlId;
-            }
-            $payload=[
-                'id_user'     => $id_user,
-                'rlId'        => $id_read_list,
-                'pgId'        => $data_pg->pgId,
-                'created_at'  => date("Y-m-d H:i:s"),
-            ];                            
-            $table_name_for_saving=$this->table_pengetahuan_readlist_content;
         }
-        
-        if($data_check==0){
-            $save_pinetc=DB::table($table_name_for_saving)->insert($payload);
+        if(session()->get('USER_LOGIN')){
+            $id_user    =session()->get('USER_LOGIN.ID');
+            if($request->type_options ==="like"){
+                $note_response="Sukai";
+                $data_check = DB::table($this->table_pengetahuan_like)->where('pgId', $data_pg->pgId)->where('id_user', $id_user)->count();
+
+                $payload=[
+                    'id_user'     => $id_user,
+                    'pgId'        => $data_pg->pgId,
+                    'created_at'  => date("Y-m-d H:i:s"),
+                ];
+                $table_name_for_saving=$this->table_pengetahuan_like;
+            }
+            if($request->type_options ==="pin"){
+                $note_response="Tandai";
+                $data_check = DB::table($this->table_pengetahuan_pinned)->where('pgId', $data_pg->pgId)->where('id_user', $id_user)->count();
+                
+                $payload=[
+                    'id_user'     => $id_user,
+                    'pgId'        => $data_pg->pgId,
+                    'created_at'  => date("Y-m-d H:i:s"),
+                ];
+                $table_name_for_saving=$this->table_pengetahuan_pinned;
+            }
+            if($request->type_options ==="read_later"){
+                $note_response="Daftar Baca";
+
+                $data_check     = DB::table($this->table_pengetahuan_readlist)
+                                            ->leftJoin($this->table_pengetahuan_readlist_content, $this->table_pengetahuan_readlist.'.rlId', '=', $this->table_pengetahuan_readlist_content.'.rlId')
+                                            ->where($this->table_pengetahuan_readlist_content.'.pgId', $data_pg->pgId)
+                                            ->where($this->table_pengetahuan_readlist.'.id_user', $id_user)
+                                            ->count();
+                
+                $query_check    = DB::table($this->table_pengetahuan_readlist)
+                                            ->select("rlId")
+                                            ->where('id_user', $id_user);
+                $data_readlist_id=$query_check->first();
+                if($query_check->count()==0){
+                    #rlId 	id_user 	rlTitle 	rlPermalink 	rlDescription 	created_at 	updated_at 	
+                    $next_readlist=$this->nextid("pengetahuan_readlist","rlId");
+                    $payload_readlist=[
+                        'rlId'          =>$next_readlist,
+                        'id_user'       =>$id_user,
+                        'rlTitle'       =>"BACA_NANTI",
+                        'rlPermalink'   =>$next_readlist."-".\Str::slug("BACA NANTI"),
+                        'rlDescription' =>'Baca Nanti Description',
+                        'created_at'    =>date("Y-m-d H:i:s"),
+                    ];
+                    $save_rltetc=DB::table($this->table_pengetahuan_readlist)->insert($payload_readlist);
+
+                    $id_read_list=$next_readlist;
+                }else{
+                    $id_read_list=$data_readlist_id->rlId;
+                }
+                $payload=[
+                    'id_user'     => $id_user,
+                    'rlId'        => $id_read_list,
+                    'pgId'        => $data_pg->pgId,
+                    'created_at'  => date("Y-m-d H:i:s"),
+                ];                            
+                $table_name_for_saving=$this->table_pengetahuan_readlist_content;
+            }
             
-            $response=[
-                'success'   =>"Berhasil",
-                "ID"        =>$request->id,
-                "TITLE"     =>$data_pg->pgTitle,
-                "NOTE"      =>($request->type_options !== "read_later" ? "ke dalam daftar yang anda ".$note_response : "ke dalam Daftar Baca Anda"),
-                "ICON"      =>"/assets/images/check.png",
-            ];
+            if($data_check==0){
+                $save_pinetc=DB::table($table_name_for_saving)->insert($payload);
+                
+                $response=[
+                    'success'   =>"Berhasil",
+                    "ID"        =>$request->id,
+                    "TITLE"     =>$data_pg->pgTitle,
+                    "NOTE"      =>($request->type_options !== "read_later" ? "ke dalam daftar yang anda ".$note_response : "ke dalam Daftar Baca Anda"),
+                    "ICON"      =>"/assets/images/check.png",
+                ];
+            }else{
+                $response=[
+                    'success'   =>"Gagal",
+                    "ID"        =>$request->id,
+                    "TITLE"     =>$data_pg->pgTitle,
+                    "NOTE"      =>($request->type_options !== "read_later" ? "karena Sudah ada di dalam daftar yang anda ".$note_response : "Karena Sudah ada di dalam Daftar Baca Anda"),
+                    "ICON"      =>"/assets/images/cross.png",
+                ];
+            }
         }else{
             $response=[
                 'success'   =>"Gagal",
                 "ID"        =>$request->id,
                 "TITLE"     =>$data_pg->pgTitle,
-                "NOTE"      =>($request->type_options !== "read_later" ? "karena Sudah ada di dalam daftar yang anda ".$note_response : "Karena Sudah ada di dalam Daftar Baca Anda"),
+                "NOTE"      =>"Anda harus <span style='color:#FFC451;font-weight:bold'>Login</span> terlebih dahulu untuk Menambahkan ke dalam ".$note_response,
                 "ICON"      =>"/assets/images/cross.png",
             ];
         }

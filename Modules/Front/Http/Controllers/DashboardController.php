@@ -49,13 +49,13 @@ class DashboardController extends Controller
         */
 
         ##TEST USER LOGIN SESSION...........................................
-        $USER_LOGIN = [
-            "ID"    =>5,
-            "NAME"  =>"Alesha Farzana Rohman",
-            "AVATAR"=>"https://bootdey.com/img/Content/avatar/avatar5.png",
-            "NIP "  =>"199002132023211016",
-        ];
-        $request->session()->put('USER_LOGIN', $USER_LOGIN);
+        // $USER_LOGIN = [
+        //     "ID"    =>5,
+        //     "NAME"  =>"Alesha Farzana Rohman",
+        //     "AVATAR"=>"https://bootdey.com/img/Content/avatar/avatar5.png",
+        //     "NIP "  =>"199002132023211016",
+        // ];
+        // $request->session()->put('USER_LOGIN', $USER_LOGIN);
         #-------------------------------------------------------------------
         
         $data_like = DB::table($this->table_pengetahuan_like)

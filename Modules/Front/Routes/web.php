@@ -22,24 +22,24 @@ Route::prefix('front')->group(function() {
     Route::get('materi/filter_category/{id}', 'MateriController@filter_category')->name('materi.filter_category');
     Route::get('materi/load_more/{id}', 'MateriController@load_more')->name('materi.load_more'); 
     
+    Route::group(['middleware' => ['auth']], function() {
+        Route::resource('dashboard','DashboardController');
+        Route::resource('setting','SettingController');
+        Route::resource('riwayat_baca','RiwayatBacaController');
 
-    Route::resource('dashboard','DashboardController');
-    Route::resource('setting','SettingController');
-    Route::resource('contactus','ContactusController');
-    Route::resource('riwayat_baca','RiwayatBacaController');
+        Route::resource('daftarku','DaftarkuController');
+        Route::get('daftarku/disukai/{id}', 'DaftarkuController@disukai')->name('daftarku.disukai');
+        Route::get('daftarku/ditandai/{id}', 'DaftarkuController@ditandai')->name('daftarku.ditandai');
+        Route::get('daftarku/daftar_baca/{id}', 'DaftarkuController@daftar_baca')->name('daftarku.daftar_baca');
 
-    Route::resource('daftarku','DaftarkuController');
-    Route::get('daftarku/disukai/{id}', 'DaftarkuController@disukai')->name('daftarku.disukai');
-    Route::get('daftarku/ditandai/{id}', 'DaftarkuController@ditandai')->name('daftarku.ditandai');
-    Route::get('daftarku/daftar_baca/{id}', 'DaftarkuController@daftar_baca')->name('daftarku.daftar_baca');
+        Route::resource('hubungi_admin','HubungiAdminController');
+        Route::post('hubungi_admin/post_comments/{id}', 'HubungiAdminController@post_comments')->name('hubungi_admin.post_comments');
+    });
 
     Route::resource('post_ajax','PostAjaxController');
     Route::post('post_ajax/post_rating/{id}', 'PostAjaxController@post_rating')->name('post_ajax.post_rating');
 
-    Route::resource('hubungi_admin','HubungiAdminController');
-    Route::post('hubungi_admin/post_comments/{id}', 'HubungiAdminController@post_comments')->name('hubungi_admin.post_comments');
-
-    
+    Route::resource('contactus','ContactusController');
 
     #Route::post('front/post_contactus', 'FrontController@post_contactus')->name('front.post_contactus');
 

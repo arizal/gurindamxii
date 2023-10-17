@@ -74,34 +74,40 @@
 
       <nav id="navbar" class="navbar order-last order-lg-0">
         <ul>
-          <li><a class="nav-link scrollto " href="{{url('/front/#hero')}}">Home</a></li>
+          <li><a class="nav-link scrollto " href="{{url('/front/')}}">Home</a></li>
           <li><a class="nav-link scrollto" href="{{url('/front/#about')}}">About</a></li>
           <?php /*<li><a class="nav-link scrollto" href="#services">Services</a></li>
           <li><a class="nav-link scrollto " href="#portfolio">Portfolio</a></li> */ ?>
           <li><a class="nav-link scrollto <?php /*active*/ ?>" href="{{url('/front/materi/')}}">Materi</a></li>
           <li><a class="nav-link scrollto" href="{{url('/front/#contact')}}">Contact</a></li>
-          <li class="dropdown"><a href="#" style="color:#fcc353"><span>Arizal Nur Rohman</span> <i class="bi bi-chevron-down"></i></a>
-            <ul>
-              <li><a href="{{url('/front/dashboard/')}}"><i class="fa fa-home fa-lg"></i>Dashboard</a></li>
-              <li class="dropdown"><a href="#"><i class="fa fa-list fa-lg"></i><span>Daftarku</span> <i class="bi bi-chevron-right"></i></a>
-                <ul>
-                  <li><a href="{{url('/front/daftarku/disukai/sukai')}}"><i class="fa fa-heart fa-lg"></i>Disukai<?php /*(2)*/ ?></a></li>
-                  <li><a href="{{url('/front/daftarku/ditandai/tandai')}}"><i class="fa fa-thumbtack fa-lg"></i>Ditandai</a></li>
-                  <li><a href="{{url('/front/daftarku/daftar_baca/baca')}}"><i class="fa fa-list fa-lg"></i>Daftar Baca</a></li>
-                </ul>
-              </li>
-              <li><a href="{{url('/front/riwayat_baca')}}"><i class="fa fa-newspaper-o fa-lg"></i>Riwayat Baca</a></li>
-              <li><a href="{{url('/front/hubungi_admin')}}"><i class="fa fa-comments-o fa-lg"></i>Hubungi Admin</a></li>
-              <li><a href="{{url('/front/pengaturan')}}"><i class="fa fa-gear fa-lg"></i>Pengaturan</a></li>
-              <li><a href="{{url('/logout')}}"><i class="fa fa-key fa-lg"></i>Logout</a></li>
-            </ul>
-          </li>
+          @auth
+            @if (\Illuminate\Support\Facades\Auth::user()->hasRole('user')  == 'user')
+            <li class="dropdown"><a href="#" style="color:#fcc353"><span>{{ Session::get('USER_LOGIN.NAME') }}</span> <i class="bi bi-chevron-down"></i></a>
+              <ul>
+                <li><a href="{{url('/front/dashboard/')}}"><i class="fa fa-home fa-lg"></i>Dashboard</a></li>
+                <li class="dropdown"><a href="#"><i class="fa fa-list fa-lg"></i><span>Daftarku</span> <i class="bi bi-chevron-right"></i></a>
+                  <ul>
+                    <li><a href="{{url('/front/daftarku/disukai/sukai')}}"><i class="fa fa-heart fa-lg"></i>Disukai<?php /*(2)*/ ?></a></li>
+                    <li><a href="{{url('/front/daftarku/ditandai/tandai')}}"><i class="fa fa-thumbtack fa-lg"></i>Ditandai</a></li>
+                    <li><a href="{{url('/front/daftarku/daftar_baca/baca')}}"><i class="fa fa-list fa-lg"></i>Daftar Baca</a></li>
+                  </ul>
+                </li>
+                <li><a href="{{url('/front/riwayat_baca')}}"><i class="fa fa-newspaper-o fa-lg"></i>Riwayat Baca</a></li>
+                <li><a href="{{url('/front/hubungi_admin')}}"><i class="fa fa-comments-o fa-lg"></i>Hubungi Admin</a></li>
+                <li><a href="{{url('/front/pengaturan')}}"><i class="fa fa-gear fa-lg"></i>Pengaturan</a></li>
+                <li><a href="{{url('/logout')}}"><i class="fa fa-key fa-lg"></i>Logout</a></li>
+              </ul>
+            </li>
+            @endif
+          @endauth
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
-      <?php /*
-      <a href="<?php print url('/login'); ?>" class="get-started-btn scrollto">Login</a> */ ?>
-
+      
+      @guest
+        <a href="<?php print url('/login'); ?>" class="get-started-btn scrollto">Login</a>
+      @endguest
+      
     </div>
   </header><!-- End Header -->
 
