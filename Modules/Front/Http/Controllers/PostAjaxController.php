@@ -16,6 +16,8 @@ class PostAjaxController extends Controller
     public $table_pengetahuan_pinned            ="pengetahuan_pinned";
     public $table_pengetahuan_readlist          ="pengetahuan_readlist";
     public $table_pengetahuan_readlist_content  ="pengetahuan_readlist_content";
+
+    public $table_newsletter_subscriber         ="newsletter_subscriber";
     
     // public static function getLogin()
     // {
@@ -229,5 +231,41 @@ class PostAjaxController extends Controller
         $response=array("success"=>"ok");
         return response()->json($response);
         exit;
+    }
+
+    public function post_newsletter(Request $request)
+    {
+        $validator = \Validator::make($request->all(), [
+            'email'=>'required',
+        ], [
+            'email.required' => 'Kolom email Wajib Di isi.',
+        ]);
+        if ($validator->fails()){
+            return response()->json(['errors'=>$validator->errors()->all()]);
+            exit;
+        }else{
+            $data_pg    = DB::table($this->table_newsletter_subscriber)->where('nsubEmail', $request->email)->where('nsubStatus', 'y')->first();
+            if($data_pg){
+                return response()->json(['errors'=>"Email yang anda masukkan sudah terdaftar.."]);exit;
+            }else{
+                #nsubId 	nsubEmail 	nsubStatus 	nsubSubsribe 	nsubUnSubsribe 	id_user 	created_at 	updated_at 	
+                $payload=[
+                    'nsubId'           => $this->nextid("newsletter_subscriber","nsubId"),
+                    'nsubPermalink'    =>$this->nextid("newsletter_subscriber","nsubId")."-".sha1($this->nextid("newsletter_subscriber","nsubId")),
+                    'nsubEmail'        => $request->email,
+                    'nsubStatus'       => 'y',
+                    'nsubSubsribe'     => date("Y-m-d H:i:s"),
+                    'id_user'          =>0,
+                    'created_at'       => date("Y-m-d H:i:s"),
+                ];
+
+                $save_subcribe=DB::table($this->table_newsletter_subscriber)->insert($payload);
+                if($save_subcribe){
+                    return response()->json(['success'=>"Alhamdulillah.."]);exit;
+                }else{
+                    return response()->json(['errors'=>"Gagal menyimpan data..!"]);exit;
+                }
+            }
+        }
     }
 }

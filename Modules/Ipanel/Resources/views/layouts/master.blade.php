@@ -547,15 +547,12 @@
 						$arx['pgt'][]="pengetahuan_highlight";
 					?>
 					<li class="{{(in_array(Request::segment(2),$arx['pgt']))?'active open':''}}">
-						
 						<a href="" class="dropdown-toggle">
 							<i class="menu-icon fa fa-list"></i>
 							<span class="menu-text"> Materi </span>
 							<b class="arrow fa fa-angle-down"></b>
 						</a>
-
 						<b class="arrow"></b>
-
 						<ul class="submenu">
 							<li class="{{Request::segment(2)=='pengetahuan'? 'active':''}}">
 								<a href="{{url('/ipanel/pengetahuan')}}">
@@ -564,7 +561,6 @@
 								</a>
 								<b class="arrow"></b>
 							</li>
-
 							<li class="{{Request::segment(2)=='pengetahuan_category'? 'active':''}}">
 								<a href="{{url('/ipanel/pengetahuan_category')}}">
 									<i class="menu-icon fa fa-caret-right"></i>
@@ -572,7 +568,6 @@
 								</a>
 								<b class="arrow"></b>
 							</li>
-
 							<li class="{{Request::segment(2)=='pengetahuan_comments'? 'active':''}}">
 								<a href="{{url('/ipanel/pengetahuan_comments')}}">
 									<i class="menu-icon fa fa-caret-right"></i>
@@ -580,7 +575,6 @@
 								</a>
 								<b class="arrow"></b>
 							</li>
-
 							<li class="{{Request::segment(2)=='pengetahuan_rating'? 'active':''}}">
 								<a href="{{url('/ipanel/pengetahuan_rating')}}">
 									<i class="menu-icon fa fa-caret-right"></i>
@@ -588,7 +582,6 @@
 								</a>
 								<b class="arrow"></b>
 							</li>
-
 							<li class="{{Request::segment(2)=='pengetahuan_highlight'? 'active':''}}">
 								<a href="{{url('/ipanel/pengetahuan_highlight')}}">
 									<i class="menu-icon fa fa-caret-right"></i>
@@ -596,6 +589,39 @@
 								</a>
 								<b class="arrow"></b>
 							</li>
+						</ul>
+					</li>
+					<?php
+						$arx['nws']['link'][0]="newsletter";
+						$arx['nws']['link'][1]="newsletter_subscriber";
+						$arx['nws']['link'][2]="newsletter_queue";
+
+						$arx['nws']['name'][0]="News Letter";
+						$arx['nws']['name'][1]="News Letter Subscriber";
+						$arx['nws']['name'][2]="News Letter Queue";
+
+						$arx['nws']['icon'][0]="News Letter";
+						$arx['nws']['icon'][1]="News Letter Subscriber";
+						$arx['nws']['icon'][2]="News Letter Queue";
+					?>
+					<li class="{{(in_array(Request::segment(2),$arx['nws']['link']))?'active open':''}}">
+						<a href="" class="dropdown-toggle">
+							<i class="menu-icon fa fa-newspaper-o"></i>
+							<span class="menu-text"> News Letter </span>
+							<b class="arrow fa fa-angle-down"></b>
+						</a>
+						<b class="arrow"></b>
+						<ul class="submenu">
+							<?php 
+							foreach($arx['nws']['name'] as $key=>$vals){?>
+							<li class="{{Request::segment(2)==$arx['nws']['link'][$key]? 'active':''}}">
+								<a href="{{url('/ipanel/'.$arx['nws']['link'][$key])}}">
+									<i class="menu-icon fa fa-caret-right"></i>
+									{{$vals}}
+								</a>
+								<b class="arrow"></b>
+							</li>
+							<?php } ?>
 						</ul>
 					</li>
 

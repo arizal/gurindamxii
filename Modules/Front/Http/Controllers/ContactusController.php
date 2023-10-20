@@ -8,7 +8,6 @@ use Illuminate\Routing\Controller;
 
 use App\Mail\MySendMail;
 use Illuminate\Support\Facades\Mail;
-
 use Illuminate\Support\Facades\DB;
 
 class ContactusController extends Controller
@@ -83,15 +82,22 @@ class ContactusController extends Controller
             #return response()->json(['errors'=>$validator->errors()->all()]);
             exit;
         }else{
+            //$file = asset('storage/images/assets_pengetahuan/2023/10/20231003/651b854b3c7f3.JPG');
             $details = [
-                'from' => [
-                        'address' => 'gurindam@gmail.com', 
-                        'name' => 'Gurindam Kanreg XII'],
-
-                'nama' => $request->cnname,
-                'HP' => $request->cnhp,
-                'isi Pesan' => $request->cnmessage,
-                
+                'from'  => [
+                            'address' => 'gurindam@gmail.com', 
+                            'name' => 'Gurindam Kanreg XII'
+                        ],
+                'subject'=>"Konfirmasi Gurindam - Contact Us.",
+                //'with'=>(
+                //    [
+                //        'nama' => 'Diki Alfarabi Hadi',
+                //        'website' => 'www.malasngoding.com',
+                //    ]),
+                'title' => 'Terimakasih telah mengirimkan '.$request->cntype,
+                'body' => 'Terimakasih bapak/ibu '.$request->cnname.' telah mengirimkan '.$request->cntype.' Kepada kami, dengan Judul '.$request->cntype.' anda '.$request->cntitle.' dengan isi '.$request->cntype.' anda '.$request->cnmessage.' ',
+                //'read_more'=>"http://godemo.my.id/front/materi/11-membangun-tim-audit-spesialis-yang-kompeten",
+                //'img'   =>"http://godemo.my.id/storage/images/assets_pengetahuan/2023/10/20231009/6523b85b2c559.JPG", 
             ];
 
             $send_mail=Mail::to($request->cnemail)->send(new MySendMail($details));

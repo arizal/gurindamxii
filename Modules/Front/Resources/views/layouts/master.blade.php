@@ -88,7 +88,7 @@
                 <li class="dropdown"><a href="#"><i class="fa fa-list fa-lg"></i><span>Daftarku</span> <i class="bi bi-chevron-right"></i></a>
                   <ul>
                     <li><a href="{{url('/front/daftarku/disukai/sukai')}}"><i class="fa fa-heart fa-lg"></i>Disukai<?php /*(2)*/ ?></a></li>
-                    <li><a href="{{url('/front/daftarku/ditandai/tandai')}}"><i class="fa fa-thumbtack fa-lg"></i>Ditandai</a></li>
+                    <?php /*<li><a href="{{url('/front/daftarku/ditandai/tandai')}}"><i class="fa fa-thumbtack fa-lg"></i>Ditandai</a></li>*/ ?>
                     <li><a href="{{url('/front/daftarku/daftar_baca/baca')}}"><i class="fa fa-list fa-lg"></i>Daftar Baca</a></li>
                   </ul>
                 </li>
@@ -104,12 +104,17 @@
             </li>
             @endif
           @endauth
+          @guest
+            <li style="margin-left:20px;" class="login_buttons">
+              <a class="nav-link scrollto" href="{{url('/login')}}" style="">Login</a>
+            </li>
+          @endguest
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav><!-- .navbar -->
       
       @guest
-        <a href="<?php print url('/login'); ?>" class="get-started-btn scrollto">Login</a>
+        <a href="<?php print url('/login'); ?>" class="get-started-btn scrollto login_buttonsx" style="display:none">Login</a>
       @endguest
       
     </div>
@@ -166,8 +171,10 @@
           <div class="col-lg-5 col-md-6 footer-newsletter">
             <h4>Dapatkan Info terbaru</h4>
             <p>Daftarkan Email anda untuk mendapatkan informasi Materi yang baru ditambahkan</p>
-            <form action="" method="post">
-              <input type="email" name="email"><input type="submit" value="Daftarkan Email">
+            <form action="{{route('post_ajax.post_newsletter')}}" method="post" id="post_newsletter">
+              @csrf
+              <input type="email" name="email" placeholder="Masukkan Email Anda">
+              <input type="submit" value="Daftarkan Email">
             </form>
 
           </div>
@@ -242,6 +249,46 @@
         loadingImage : '<?php print url('/') ;?>/assetsi/plugins/facebox/loading.gif',
         closeImage   : '<?php print url('/') ;?>/assetsi/plugins/facebox/closelabel.png'
       });
+      $('#post_newsletter').submit(function(e){
+						e.preventDefault(); 
+            $.ajax({
+              url:$(this).closest('form').attr('action'),
+              type:"post",
+              data:new FormData(this), 
+              processData:false,
+              contentType:false,
+              dataType: "json",
+              cache:false,
+              async:false,
+              success: function(data){
+                if($.isEmptyObject(data.errors)){
+                  swal({ 
+                    html:true,
+                    type: 'success',
+                    title: 'Berhasil',
+                    text:'<span style="font-size:14px">Grats</span>',
+                    text: 'Anda Berhasil mendaftarkan email anda sebagai Berlangganan Informasi Gurindam',
+                  });
+                }else{
+                  swal({ 
+                    html:true,
+                    type: 'error',
+                    title: 'Error',
+                    text:'<span style="font-size:14px">'+ data.errors +'</span>',
+                    text: data.errors,
+                  });
+                }
+              },
+              error: function(err, exception) {
+                swal({ 
+                    html:true,
+                    type: 'error',
+                    title: 'Error',
+                    text: '<span style="font-size:14px">Gagal menambahkan data!</span>',
+                  });
+              },
+            });
+					});
       <?php
 				if(isset($data['summernote'])){?>
 					@foreach($data['summernote'] as $smkey=>$smval)

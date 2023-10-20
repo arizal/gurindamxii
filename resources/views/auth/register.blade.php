@@ -383,7 +383,7 @@
 
                         <div class="login__box">
                             <i class='bx bx-lock-alt login__icon'></i>
-                            <input type="password" name="password_confirmation" placeholder="Password" class="login__input"  required autocomplete="new-password">
+                            <input type="password" name="password_confirmation" placeholder="Ulangi Password" class="login__input"  required autocomplete="new-password">
                         </div>
 
                         <button type="submit" class="login__button" style="width:100%">

@@ -198,7 +198,7 @@
     </div>
 
     @if($data['data']->haSession==="open")
-    <form action="{{route('hubungi_admin.reply_comments',$data['data']->haPermalink)}}" method="post" id="balasan" style="border:1px solid #ccc;"> 
+    <form action="{{route('hubungi_admins.reply_comments',$data['data']->haPermalink)}}" method="post" id="balasan" style="border:1px solid #ccc;"> 
         @csrf
         <div class="form-actions" style="margin-top:0px !important">
             <div class="row">

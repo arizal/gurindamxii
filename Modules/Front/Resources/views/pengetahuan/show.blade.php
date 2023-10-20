@@ -363,52 +363,72 @@
                         
                         <div class="accordion-body js-accordion-body">
                             <div class="accordion-body__contents">
-                                @auth
-                                    @if (\Illuminate\Support\Facades\Auth::user()->hasRole('user')  == 'user')
-                                        @if($ctval->pcContentType =='document')
-                                            <object data="{{asset('storage/images/assets_pengetahuan/'.$ctval->pcDocuments)}}" type="application/pdf" width="100%" height="900">
-                                                <a href="{{asset('storage/images/assets_pengetahuan/'.$ctval->pcDocuments)}}">{{$ctval->pcContentType}}</a>
-                                            </object>
-                                            <?php /*
-                                            <iframe style="height:900px; width: 100%;" src="{{asset('storage/images/assets_pengetahuan/'.$ctval->pcDocuments)}}"></iframe> */ ?>
-                                        @endif
-                                        @if($ctval->pcContentType =='video')
-                                            <video width="100%" style="aspect-ratio: 16 / 9" controls>
-                                                <source src="{{asset('storage/images/assets_pengetahuan/'.$ctval->pcVideo)}}" type="video/mp4">
-                                                <source src="movie.ogg" type="video/ogg">
-                                                    Your browser does not support the video tag.
-                                            </video>
-                                        @endif
-                                        @if($ctval->pcContentType =='text')
-                                            {!!$ctval->pcText!!}
-                                        @endif
+                                @if($data['data']->pgType =='Private')
+                                    @auth
+                                        @if (\Illuminate\Support\Facades\Auth::user()->hasRole('user')  == 'user')
+                                            @if($ctval->pcContentType =='document')
+                                                <object data="{{asset('storage/images/assets_pengetahuan/'.$ctval->pcDocuments)}}" type="application/pdf" width="100%" height="900">
+                                                    <a href="{{asset('storage/images/assets_pengetahuan/'.$ctval->pcDocuments)}}">{{$ctval->pcContentType}}</a>
+                                                </object>
+                                                <?php /*
+                                                <iframe style="height:900px; width: 100%;" src="{{asset('storage/images/assets_pengetahuan/'.$ctval->pcDocuments)}}"></iframe> */ ?>
+                                            @endif
+                                            @if($ctval->pcContentType =='video')
+                                                <video width="100%" style="aspect-ratio: 16 / 9" controls>
+                                                    <source src="{{asset('storage/images/assets_pengetahuan/'.$ctval->pcVideo)}}" type="video/mp4">
+                                                    <source src="movie.ogg" type="video/ogg">
+                                                        Your browser does not support the video tag.
+                                                </video>
+                                            @endif
+                                            @if($ctval->pcContentType =='text')
+                                                {!!$ctval->pcText!!}
+                                            @endif
 
-                                        {{-- START : TOMBOL TANDAI SUDAH SELESAI --}}
-                                        @php
-                                        $already_finish = Modules\Front\Http\Controllers\MateriController::get_beread($ctval->pcPermalink);
-                                        @endphp
-                                        @if($already_finish===0)
-                                        <div style="text-align:right !important; padding-bottom:10px;">
-                                            <a href="{{route('materi.post_finish',$ctval->pcPermalink)}}" class="clicks click_{{$ctid}}" title="click_{{$ctid}}">
-                                                <button class="btn btn-xs btn-info" <?php /*OnClick="alert('hahha')" */ ?>>
-                                                    <i class="ace-icon fa fa-bolt bigger-110"></i>
-                                                        Tandai Selesai
-                                                    <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
-                                                </button>
-                                            </a>
-                                        </div>
+                                            {{-- START : TOMBOL TANDAI SUDAH SELESAI --}}
+                                            @php
+                                            $already_finish = Modules\Front\Http\Controllers\MateriController::get_beread($ctval->pcPermalink);
+                                            @endphp
+                                            @if($already_finish===0)
+                                            <div style="text-align:right !important; padding-bottom:10px;">
+                                                <a href="{{route('materi.post_finish',$ctval->pcPermalink)}}" class="clicks click_{{$ctid}}" title="click_{{$ctid}}">
+                                                    <button class="btn btn-xs btn-info" <?php /*OnClick="alert('hahha')" */ ?>>
+                                                        <i class="ace-icon fa fa-bolt bigger-110"></i>
+                                                            Tandai Selesai
+                                                        <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+                                                    </button>
+                                                </a>
+                                            </div>
+                                            @endif
+                                            {{-- END : TOMBOL TANDAI SUDAH SELESAI --}}
                                         @endif
-                                        {{-- END : TOMBOL TANDAI SUDAH SELESAI --}}
-                                    @endif
-                                @endauth
+                                    @endauth
                                 
-                                @guest
-                                    {{-- START : NOTIFIKASI APABILA BELUM LOGIN --}}
-                                    <div class="alert alert-danger" role="alert">
-                                        Anda harus Login terlebih dahulu untuk membaca Materi Ini..
-                                    </div>
-                                    {{-- END : NOTIFIKASI APABILA BELUM LOGIN --}}
-                                @endguest
+                                    @guest
+                                        {{-- START : NOTIFIKASI APABILA BELUM LOGIN --}}
+                                        <div class="alert alert-danger" role="alert">
+                                            Anda harus Login terlebih dahulu untuk membaca Materi Ini..
+                                        </div>
+                                        {{-- END : NOTIFIKASI APABILA BELUM LOGIN --}}
+                                    @endguest
+                                @else
+                                    @if($ctval->pcContentType =='document')
+                                        <object data="{{asset('storage/images/assets_pengetahuan/'.$ctval->pcDocuments)}}" type="application/pdf" width="100%" height="900">
+                                            <a href="{{asset('storage/images/assets_pengetahuan/'.$ctval->pcDocuments)}}">{{$ctval->pcContentType}}</a>
+                                        </object>
+                                        <?php /*
+                                        <iframe style="height:900px; width: 100%;" src="{{asset('storage/images/assets_pengetahuan/'.$ctval->pcDocuments)}}"></iframe> */ ?>
+                                    @endif
+                                    @if($ctval->pcContentType =='video')
+                                        <video width="100%" style="aspect-ratio: 16 / 9" controls>
+                                            <source src="{{asset('storage/images/assets_pengetahuan/'.$ctval->pcVideo)}}" type="video/mp4">
+                                            <source src="movie.ogg" type="video/ogg">
+                                                Your browser does not support the video tag.
+                                        </video>
+                                    @endif
+                                    @if($ctval->pcContentType =='text')
+                                        {!!$ctval->pcText!!}
+                                    @endif
+                                @endif
                             </div>
                         </div><!-- end of accordion body -->
                         

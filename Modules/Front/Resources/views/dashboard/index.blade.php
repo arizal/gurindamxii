@@ -318,24 +318,28 @@
                                                             @php
                                                                 $rndm_color=array("item-orange","item-red","item-default","item-blue","item-grey","item-green","item-pink");
                                                             @endphp
-                                                            @foreach($data_dashboard['dt_read']['materi'] as $mtkey=>$mtval)
-                                                            @php
-                                                                $random_picked=array_rand($rndm_color,1);
-                                                                $hitung_persen=ceil(($mtval->readActual/$mtval->readContent)*100)
-                                                            @endphp
-                                                            <li class="{{$rndm_color[$random_picked]}} clearfix ui-sortable-handle" style="list-style-type:none">
-                                                                <label class="inline" style="float:left; width:100%">
-                                                                    <span class="lbl" style="float:left;width:80%"> 
-                                                                        <a href="{{url('/front/materi/'.$mtval->pgPermalink)}}" target="_blank">
-                                                                            {{$mtval->pgTitle}}
-                                                                        </a>
-                                                                    </span>
-                                                                    <span style="float:right;width:20%;padding-right:5px; text-align:right">
-                                                                        <a href="#">({{$mtval->readActual." / ".$mtval->readContent}}) {{$hitung_persen}}% </a>
-                                                                    </span>
-                                                                </label>
-                                                            </li>
-                                                            @endforeach
+                                                            @if(count($data_dashboard['dt_read']['materi']) > 0)
+                                                                @foreach($data_dashboard['dt_read']['materi'] as $mtkey=>$mtval)
+                                                                @php
+                                                                    $random_picked=array_rand($rndm_color,1);
+                                                                    $hitung_persen=ceil(($mtval->readActual/$mtval->readContent)*100)
+                                                                @endphp
+                                                                <li class="{{$rndm_color[$random_picked]}} clearfix ui-sortable-handle" style="list-style-type:none">
+                                                                    <label class="inline" style="float:left; width:100%">
+                                                                        <span class="lbl" style="float:left;width:80%"> 
+                                                                            <a href="{{url('/front/materi/'.$mtval->pgPermalink)}}" target="_blank">
+                                                                                {{$mtval->pgTitle}}
+                                                                            </a>
+                                                                        </span>
+                                                                        <span style="float:right;width:20%;padding-right:5px; text-align:right">
+                                                                            <a href="#">({{$mtval->readActual." / ".$mtval->readContent}}) {{$hitung_persen}}% </a>
+                                                                        </span>
+                                                                    </label>
+                                                                </li>
+                                                                @endforeach
+                                                            @else
+                                                                <div style="text-align:center; padding:30px; width:100%"> Data belum ada </div>
+                                                            @endif
                                                         </div>
                                                     </div>
                                                 </div>
@@ -384,7 +388,7 @@
                                                 </li>
 
                                                 <li class="">
-                                                    <a data-toggle="tab" href="#disukai-tab" aria-expanded="false">Disukai&Ditandai</a>
+                                                    <a data-toggle="tab" href="#disukai-tab" aria-expanded="false">Disukai</a>
                                                 </li>
                                                 
                                             </ul>
@@ -401,24 +405,28 @@
                                                     </h4>
 
                                                     <ul id="tasks" class="item-list ui-sortable">
-                                                        @foreach($data_dashboard['dt_riwayat'] as $mtkey=>$mtval)
-                                                        @php
-                                                            $random_picked=array_rand($rndm_color,1);
-                                                        @endphp
-                                                        <li class="{{$rndm_color[$random_picked]}} clearfix ui-sortable-handle">
-                                                            <label class="inline">
-                                                                <?php /*<input type="checkbox" class="ace"> */ ?>
-                                                                <span class="lbl"> 
-                                                                    <a href="{{url('/front/materi/'.$mtval->pgPermalink)}}">{{$mtval->pgTitle}}</a>
-                                                                    <br><i class="ace-icon fa fa-clock-o"></i>&nbsp;<em>{{date("d M Y H:i:s",strtotime($mtval->created_at))}} WIB</em>
-                                                                </span>
-                                                            </label>
-                                                            <?php /*
-                                                            <div class="pull-right easy-pie-chart percentage" data-size="30" data-color="#ECCB71" data-percent="42" style="height: 30px; width: 30px; line-height: 29px;">
-                                                                <span class="percent">42</span>%
-                                                            <canvas height="30" width="30"></canvas></div> */ ?>
-                                                        </li>
-                                                        @endforeach
+                                                        @if(count($data_dashboard['dt_riwayat']) > 0)
+                                                            @foreach($data_dashboard['dt_riwayat'] as $mtkey=>$mtval)
+                                                            @php
+                                                                $random_picked=array_rand($rndm_color,1);
+                                                            @endphp
+                                                            <li class="{{$rndm_color[$random_picked]}} clearfix ui-sortable-handle">
+                                                                <label class="inline">
+                                                                    <?php /*<input type="checkbox" class="ace"> */ ?>
+                                                                    <span class="lbl"> 
+                                                                        <a href="{{url('/front/materi/'.$mtval->pgPermalink)}}">{{$mtval->pgTitle}}</a>
+                                                                        <br><i class="ace-icon fa fa-clock-o"></i>&nbsp;<em>{{date("d M Y H:i:s",strtotime($mtval->created_at))}} WIB</em>
+                                                                    </span>
+                                                                </label>
+                                                                <?php /*
+                                                                <div class="pull-right easy-pie-chart percentage" data-size="30" data-color="#ECCB71" data-percent="42" style="height: 30px; width: 30px; line-height: 29px;">
+                                                                    <span class="percent">42</span>%
+                                                                <canvas height="30" width="30"></canvas></div> */ ?>
+                                                            </li>
+                                                            @endforeach
+                                                        @else
+                                                            <div style="text-align:center; padding:30px; width:100%"> Data belum ada </div>
+                                                        @endif
                                                     </ul>
                                                     <div class="space-4"></div>
                                                     <div class="center">
@@ -437,19 +445,23 @@
                                                         Daftar Baca Materi
                                                     </h4>
                                                     <ul id="tasks" class="item-list ui-sortable">
-                                                        @foreach($data_dashboard['dt_dfbaca'] as $mtkey=>$mtval)
-                                                        @php
-                                                            $random_picked=array_rand($rndm_color,1);
-                                                        @endphp
-                                                        <li class="{{$rndm_color[$random_picked]}} clearfix ui-sortable-handle">
-                                                            <label class="inline">
-                                                                <span class="lbl"> 
-                                                                    <a href="{{url('/front/materi/'.$mtval->pgPermalink)}}">{{$mtval->pgTitle}}</a>
-                                                                    <br><i class="ace-icon fa fa-clock-o"></i>&nbsp;<em>{{date("d M Y H:i:s",strtotime($mtval->created_at))}} WIB</em>
-                                                                </span>
-                                                            </label>
-                                                        </li>
-                                                        @endforeach
+                                                        @if(count($data_dashboard['dt_dfbaca']) > 0)
+                                                            @foreach($data_dashboard['dt_dfbaca'] as $mtkey=>$mtval)
+                                                            @php
+                                                                $random_picked=array_rand($rndm_color,1);
+                                                            @endphp
+                                                            <li class="{{$rndm_color[$random_picked]}} clearfix ui-sortable-handle">
+                                                                <label class="inline">
+                                                                    <span class="lbl"> 
+                                                                        <a href="{{url('/front/materi/'.$mtval->pgPermalink)}}">{{$mtval->pgTitle}}</a>
+                                                                        <br><i class="ace-icon fa fa-clock-o"></i>&nbsp;<em>{{date("d M Y H:i:s",strtotime($mtval->created_at))}} WIB</em>
+                                                                    </span>
+                                                                </label>
+                                                            </li>
+                                                            @endforeach
+                                                        @else
+                                                            <div style="text-align:center; padding:30px; width:100%"> Data belum ada </div>
+                                                        @endif
                                                     </ul>
 
                                                     <div class="space-4"></div>
@@ -473,22 +485,26 @@
                                                         Daftar Materi disukai
                                                     </h4>
                                                     <ul id="tasks" class="item-list ui-sortable">
-                                                        @foreach($data_dashboard['dt_like'] as $mtkey=>$mtval)
-                                                        @php
-                                                            $random_picked=array_rand($rndm_color,1);
-                                                        @endphp
-                                                        <li class="{{$rndm_color[$random_picked]}} clearfix ui-sortable-handle">
-                                                            <label class="inline">
-                                                                <span class="lbl"> 
-                                                                    <a href="{{url('/front/materi/'.$mtval->pgPermalink)}}">{{$mtval->pgTitle}}</a>
-                                                                    <br><i class="ace-icon fa fa-clock-o"></i>&nbsp;<em>{{date("d M Y H:i:s",strtotime($mtval->created_at))}} WIB</em>
-                                                                </span>
-                                                            </label>
-                                                        </li>
-                                                        @endforeach
+                                                        @if(count($data_dashboard['dt_like']) > 0)
+                                                            @foreach($data_dashboard['dt_like'] as $mtkey=>$mtval)
+                                                            @php
+                                                                $random_picked=array_rand($rndm_color,1);
+                                                            @endphp
+                                                            <li class="{{$rndm_color[$random_picked]}} clearfix ui-sortable-handle">
+                                                                <label class="inline">
+                                                                    <span class="lbl"> 
+                                                                        <a href="{{url('/front/materi/'.$mtval->pgPermalink)}}">{{$mtval->pgTitle}}</a>
+                                                                        <br><i class="ace-icon fa fa-clock-o"></i>&nbsp;<em>{{date("d M Y H:i:s",strtotime($mtval->created_at))}} WIB</em>
+                                                                    </span>
+                                                                </label>
+                                                            </li>
+                                                            @endforeach
+                                                        @else
+                                                            <div style="text-align:center; padding:30px; width:100%"> Data belum ada </div>
+                                                        @endif
                                                     </ul>
                                                     <div class="hr hr8"></div>
-
+                                                    <?php /*
                                                     <h4 class="smaller lighter green">
                                                         <i class="fa-solid fa-thumbtack"></i>
                                                         Daftar Materi ditandai
@@ -518,6 +534,7 @@
                                                             <i class="ace-icon fa fa-arrow-right"></i>
                                                         </a>
                                                     </div> -->
+                                                    */ ?>
 
                                                     <div class="hr hr-double hr8"></div>
                                                 </div>

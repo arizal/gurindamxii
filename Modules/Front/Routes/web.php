@@ -38,6 +38,7 @@ Route::prefix('front')->group(function() {
 
     Route::resource('post_ajax','PostAjaxController');
     Route::post('post_ajax/post_rating/{id}', 'PostAjaxController@post_rating')->name('post_ajax.post_rating');
+    Route::post('post_ajax/post_newsletter/', 'PostAjaxController@post_newsletter')->name('post_ajax.post_newsletter');
 
     Route::resource('contactus','ContactusController');
 

@@ -90,52 +90,56 @@
                                 }
                             </style>
                                 <ul id="tasks" class="item-list ui-sortable">
-                                    @foreach($data['data'] as $makey=>$maval)
-                                        @php
-                                            $random_picked=array_rand($rndm_color,1);
-                                            $comments = Modules\Front\Http\Controllers\HubungiAdminController::count_comments($maval->haId);
-                                        @endphp
-                                        <li class="{{$rndm_color[$random_picked]}} clearfix ui-sortable-handle">
-                                            <label class="inline" style="width:100%">
-                                                <?php /*<input type="checkbox" class="ace"> */ ?>
-                                                <span class="lbl"> 
-                                                    
-                                                    <span style="font-size:16px;font-weight:bold;color:#851a8b">
-                                                        No Ticket: 
-                                                        <a href="{{url('/front/hubungi_admin/'.$maval->haPermalink)}}" style="font-size:16px;font-weight:bold;color#87B6D2">{{$maval->haTicket}}</a> 
-                                                            <?php if($maval->haSession==='open'){?> <span class="label label-lg label-warning arrowed">Open</span> 
-                                                            <?php  }else{?> 
-                                                            <span class="label label-lg label-danger arrowed">Session Closed</span> 
-                                                            <?php } ?>  
-                                                    </span>
-                                                    <br>
-                                                    <a style="font-weight:bold;font-size:14px;">{{$maval->haTitle}}</a>
-                                                    <?php /*<pre>{{print_r($comments)}}</pre> */ ?>
-                                                    <?php /*if($x==0){?> <span class="label label-lg label-warning arrowed">Open</span> <?php  }else{?> <span class="label label-lg label-danger arrowed">Session Closed</span> <?php }*/ ?>    
-                                                    <br>
-                                                    <em><strong>Topik Dibuat pada</strong> {{date('d M Y H:i:s',strtotime($maval->created_at))}} WIB</em>
-                                                    
-                                                    <div style="text-align:right;margin-top:20px;">
-                                                        <?php /*<i class="ace-icon fa fa-paperclip" style="color:#609FC4"></i>    
-                                                        &nbsp; */ ?>
-                                                        <i class="ace-icon fa fa-comments-o" style="color:#609FC4"></i> 
-                                                        {{$comments['COUNT']}}
-                                                        @if($comments['UNREAD']>0)
-                                                            <span class="blink">NEW</span>
+                                    @if(count($data['data']) > 0)
+                                        @foreach($data['data'] as $makey=>$maval)
+                                            @php
+                                                $random_picked=array_rand($rndm_color,1);
+                                                $comments = Modules\Front\Http\Controllers\HubungiAdminController::count_comments($maval->haId);
+                                            @endphp
+                                            <li class="{{$rndm_color[$random_picked]}} clearfix ui-sortable-handle">
+                                                <label class="inline" style="width:100%">
+                                                    <?php /*<input type="checkbox" class="ace"> */ ?>
+                                                    <span class="lbl"> 
+                                                        
+                                                        <span style="font-size:16px;font-weight:bold;color:#851a8b">
+                                                            No Ticket: 
+                                                            <a href="{{url('/front/hubungi_admin/'.$maval->haPermalink)}}" style="font-size:16px;font-weight:bold;color#87B6D2">{{$maval->haTicket}}</a> 
+                                                                <?php if($maval->haSession==='open'){?> <span class="label label-lg label-warning arrowed">Open</span> 
+                                                                <?php  }else{?> 
+                                                                <span class="label label-lg label-danger arrowed">Session Closed</span> 
+                                                                <?php } ?>  
+                                                        </span>
+                                                        <br>
+                                                        <a style="font-weight:bold;font-size:14px;">{{$maval->haTitle}}</a>
+                                                        <?php /*<pre>{{print_r($comments)}}</pre> */ ?>
+                                                        <?php /*if($x==0){?> <span class="label label-lg label-warning arrowed">Open</span> <?php  }else{?> <span class="label label-lg label-danger arrowed">Session Closed</span> <?php }*/ ?>    
+                                                        <br>
+                                                        <em><strong>Topik Dibuat pada</strong> {{date('d M Y H:i:s',strtotime($maval->created_at))}} WIB</em>
+                                                        
+                                                        <div style="text-align:right;margin-top:20px;">
+                                                            <?php /*<i class="ace-icon fa fa-paperclip" style="color:#609FC4"></i>    
+                                                            &nbsp; */ ?>
+                                                            <i class="ace-icon fa fa-comments-o" style="color:#609FC4"></i> 
+                                                            {{$comments['COUNT']}}
+                                                            @if($comments['UNREAD']>0)
+                                                                <span class="blink">NEW</span>
+                                                            @endif
+                                                            &nbsp;&nbsp;&nbsp;
+                                                        <?php /*    
+                                                        </div>
+                                                        <div style="text-align:right; "> */ ?>
+                                                        
+                                                        @if(isset($comments['LAST']))
+                                                            <i class="ace-icon fa fa-clock-o" style="color:#0b7bbc"></i>&nbsp;<em style="font-size:11px;">{{(isset($comments['LAST'])? $comments['LAST']->created_at : '-')}} WIB</em>
                                                         @endif
-                                                        &nbsp;&nbsp;&nbsp;
-                                                    <?php /*    
-                                                    </div>
-                                                    <div style="text-align:right; "> */ ?>
-                                                    
-                                                    @if(isset($comments['LAST']))
-                                                        <i class="ace-icon fa fa-clock-o" style="color:#0b7bbc"></i>&nbsp;<em style="font-size:11px;">{{(isset($comments['LAST'])? $comments['LAST']->created_at : '-')}} WIB</em>
-                                                    @endif
-                                                    </div>
-                                                </span>
-                                            </label>
-                                        </li>
-                                    @endforeach
+                                                        </div>
+                                                    </span>
+                                                </label>
+                                            </li>
+                                        @endforeach
+                                    @else
+                                        <div style="text-align:center; padding:30px; width:100%"> Data belum ada </div>
+                                    @endif
                                 </ul>
                                 <div class="space-4"></div>
                             

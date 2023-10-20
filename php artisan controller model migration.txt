@@ -64,3 +64,23 @@ php artisan module:make-model HubungiAdminModel Ipanel
 php artisan module:make-migration create_hubungi_admin_table Ipanel
 
 php artisan module:make-migration create_pengetahuan_read_content_table Ipanel
+
+#NEWSLETTER
+php artisan module:make-controller NewsLetterController Ipanel
+php artisan module:make-model NewsLetterModel Ipanel
+php artisan module:make-migration create_newsletter_table Ipanel
+
+php artisan module:make-controller NewsLetterSubscriberController Ipanel
+php artisan module:make-model NewsLetterSubscriberModel Ipanel
+php artisan module:make-migration create_newsletter_subscriber_table Ipanel
+
+php artisan module:make-controller NewsLetterQueueController Ipanel
+php artisan module:make-model NewsLetterQueueModel Ipanel
+php artisan module:make-migration create_newsletter_queue_table Ipanel
+
+php artisan module:make-migration create_newsletter_template_table Ipanel
+
+
+
+
+

@@ -64,27 +64,31 @@
                                         <div class="col-lg-12 col-md-12 d-flex align-items-stretch" style="margin-bottom:10px;  ">
                                             <span style="font-weight:bold; border-bottom:1px solid #ccc; width:100%">Riwayat Baca :</span><br>
                                         </div> */ ?>
-                                        @foreach($data['data'] as $makey=>$maval)
-                                        @php
-                                        $time_ago = Modules\Front\Http\Controllers\MateriController::time_elapsed_string($maval->pgTimePost);
-                                        @endphp
-                                        <div class="col-xs-6 col-sm-3" style="margin-bottom:10px;">
-                                            <img src="{{asset('storage/images/assets_pengetahuan/'.$maval->pgImage)}}" width="100%">
-                                        </div>
-                                        <div class="col-xs-6 col-sm-9" style="margin-bottom:10px;border-bottom:dashed 1px #5E1362">
-                                            <div class="row">
-                                                <div class="col-xs-12">
-                                                    <a href="{{url("front/materi/".$maval->pgPermalink)}}" style="font-size:16px;">{{$maval->pgTitle}}</a>
-                                                </div>
-                                                <div class="col-xs-12">
-                                                    {{$maval->catName}}
-                                                </div>
-                                                <div class="col-xs-12" style="font-size:12px;">
-                                                    {{date("d M Y H:i:s",strtotime($maval->created_at))}} WIB
+                                        @if(count($data['data']) > 0)
+                                            @foreach($data['data'] as $makey=>$maval)
+                                            @php
+                                            $time_ago = Modules\Front\Http\Controllers\MateriController::time_elapsed_string($maval->pgTimePost);
+                                            @endphp
+                                            <div class="col-xs-6 col-sm-3" style="margin-bottom:10px;">
+                                                <img src="{{asset('storage/images/assets_pengetahuan/'.$maval->pgImage)}}" width="100%">
+                                            </div>
+                                            <div class="col-xs-6 col-sm-9" style="margin-bottom:10px;border-bottom:dashed 1px #5E1362">
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <a href="{{url("front/materi/".$maval->pgPermalink)}}" style="font-size:16px;">{{$maval->pgTitle}}</a>
+                                                    </div>
+                                                    <div class="col-xs-12">
+                                                        {{$maval->catName}}
+                                                    </div>
+                                                    <div class="col-xs-12" style="font-size:12px;">
+                                                        {{date("d M Y H:i:s",strtotime($maval->created_at))}} WIB
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        @endforeach
+                                            @endforeach
+                                        @else
+                                            <div style="text-align:center; padding:30px; width:100%"> Data belum ada </div>
+                                        @endif
                                     </div>
                                 </div>
                             </div>

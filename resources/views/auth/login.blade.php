@@ -380,6 +380,11 @@
                             <a href="{{ route('register') }}">
                             <span class="login__signin" id="nsign-up">Mendaftar</span></a>
                         </div>
+                        <div style="text-align:left; margin-top:30px;">
+                            <a href="{{url('front/')}}">
+                                <= Kembali Ke Gurindam
+                            </a>
+                        </div>    
                     </form>
                     <?php /*
                     <form action="{{ route('register') }}" class="login__create none" id="login-up">

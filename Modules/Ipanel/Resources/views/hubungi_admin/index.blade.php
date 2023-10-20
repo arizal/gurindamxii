@@ -133,7 +133,7 @@
             <tr class="datarow <?php /*{{$cupem->cuRead =='unread'?'unread':''}} */ ?>">
                 <td class="center">{{($data['data']->currentPage() - 1) * $data['data']->perPage() + $loop->iteration}}</td>
                 <td>
-                    <a href="{{route('hubungi_admin.show',$cupem->haPermalink)}}" style="font-weight:bold">{{$cupem->haTicket}}</a><br>
+                    <a href="{{route('hubungi_admins.show',$cupem->haPermalink)}}" style="font-weight:bold">{{$cupem->haTicket}}</a><br>
                     <em style="font-weight:bold">{{$cupem->haTitle}}</em><br>
                     <em>{!!$cupem->haContent!!}</em><br>
                     <em style="font-size:13px;">{!!date("d M Y H:i:s",strtotime($cupem->created_at))!!}</em><br>
@@ -141,7 +141,7 @@
                 </td>
                 
                 <td style="text-align:right">
-                    <a href="{{route('hubungi_admin.show',$cupem->haPermalink)}}">
+                    <a href="{{route('hubungi_admins.show',$cupem->haPermalink)}}">
                         {{$comments['COUNT']}} &nbsp;<i class="fa fa-comments-o bigger-120"></i>
                     </a>
                     @if($comments['UNREAD']>0) 

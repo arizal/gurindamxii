@@ -22,11 +22,9 @@ Route::prefix('ipanel')->namespace('\Modules\Ipanel\Http\Controllers')->middlewa
 });
 Route::prefix("ipanel")->namespace('\Modules\Ipanel\Http\Controllers')->middleware(['auth'])->group(function(){
     
-    
     Route::resource('categoripembelajaran','CategoriPembelajaranController');
     Route::resource('mpembelajaran','PembelajaranController');
 
-    
     #Route::resource('tambahdata', BooksController::class);
     #Route::get('mpembelajaran/tambahdata/{id}', 'PembelajaranController@tambahdata')->name('mpembelajaran.tambahdata');
     Route::get('mpembelajaran/create_submateri/{id}', 'PembelajaranController@create_submateri')->name('mpembelajaran.create_submateri');
@@ -44,6 +42,20 @@ Route::prefix("ipanel")->namespace('\Modules\Ipanel\Http\Controllers')->middlewa
     Route::post('pengetahuan/update_submateri/{id}', 'PengetahuanController@update_submateri')->name('pengetahuan.update_submateri');
     
     Route::get('pengetahuan/displayImage/{id}', 'PengetahuanController@displayImage')->name('pengetahuan.displayImage');
+
+    Route::resource('newsletter_subscriber','NewsLetterSubscriberController');
+    Route::resource('newsletter_queue','NewsLetterQueueController');
+    Route::resource('newsletter','NewsLetterController');
+
+    Route::resource('pengetahuan_category','PengetahuanCategoryController');
+    Route::resource('pengetahuan_highlight','PengetahuanHighlightController');
+    Route::resource('pengetahuan_rating','PengetahuanRatingController');
+    Route::resource('pengetahuan_comments','PengetahuanCommentController');
+
+    Route::resource('contact_us','ContactUsController');
+
+    Route::resource('hubungi_admins','HubungiAdminsController');
+    Route::post('hubungi_admins/reply_comments/{id}', 'HubungiAdminsController@reply_comments')->name('hubungi_admins.reply_comments');
 
     ########################################################################################################################################
     // bellow this one
@@ -75,21 +87,6 @@ Route::prefix("ipanel")->namespace('\Modules\Ipanel\Http\Controllers')->middlewa
         return $response;
     });
 
-
-
-    Route::resource('pengetahuan_category','PengetahuanCategoryController');
-    Route::resource('pengetahuan_highlight','PengetahuanHighlightController');
-    Route::resource('pengetahuan_rating','PengetahuanRatingController');
-    Route::resource('pengetahuan_comments','PengetahuanCommentController');
-    
-
-    Route::resource('contact_us','ContactUsController');
-
-    Route::resource('hubungi_admins','HubungiAdminsController');
-    Route::post('hubungi_admins/reply_comments/{id}', 'HubungiAdminsController@reply_comments')->name('hubungi_admins.reply_comments');
-
-    
-    
     #Route::resource('create_submateri','PembelajaranController');  
     #Route::get('create_submateri', 'PembelajaranController@open'); 
     

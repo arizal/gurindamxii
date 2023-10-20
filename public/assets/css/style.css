@@ -343,6 +343,32 @@ h6 {
   transition: 0.5s;
 }
 
+.login_buttons a{
+	color: #fff;
+	border-radius: 4px;
+	padding: 7px 25px 8px 25px;
+	white-space: nowrap;
+	transition: 0.3s;
+	font-size: 14px;
+	display: inline-block;
+	border: 2px solid #ffc451;
+}
+.login_buttons a:hover{
+	background-color:#FFBB38;
+	color:black !important;
+}
+.login_buttons a:active{
+	background-color:#FFBB38;
+	color:black !important;
+	border-radius: 4px;
+	padding: 7px 25px 8px 25px;
+	white-space: nowrap;
+	transition: 0.3s;
+	font-size: 14px;
+	display: inline-block;
+	border: 2px solid #ffc451;
+}
+
 @media (max-width: 991px) {
   .mobile-nav-toggle {
     display: block;
@@ -350,6 +376,15 @@ h6 {
 
   .navbar ul {
     display: none;
+  }
+  body{
+  	border: groove yellow;
+  }
+  .login_buttons{
+	display:none !important;  
+  }
+  .login_buttonsx{
+  	display:block !important;
   }
 }
 
