@@ -23,6 +23,8 @@ class PengetahuanController extends Controller
     public $table_pengetahuan_category  ="pengetahuan_category";
     public $table_pengetahuan_comments  ="pengetahuan_comment";
 
+    public $table_newsletter            ="newsletter";
+
     public $assets_pengetahuan          ="images/assets_pengetahuan/";
     public $paging                      =10;
     /**
@@ -42,8 +44,47 @@ class PengetahuanController extends Controller
 
         $data['data']           =$query;
         $data['assets_storage'] ="storage/".$this->assets_pengetahuan;
+        $data['new_ajax']  ="
+                            $('.addnewsletter').click(function(event){
+                                event.preventDefault();
+                                    var target_addr=$(this).attr('href');
+                                    swal({
+                                        title: \"Apakah Anda Yakin akan Menambahkan Ke dalam daftar NewsLetter ?\",
+                                        text: \"Anda tidak akan dapat membatalkan apabila sudah ditambahkan!\",
+                                        type: \"warning\",
+                                        showCancelButton: true,
+                                        confirmButtonClass: \"btn-danger\",
+                                        confirmButtonText: \"Ya, Setujui Ini!\",
+                                        cancelButtonText: \"Tidak, Tolong Batalkan!\",
+                                        closeOnConfirm: false,
+                                        closeOnCancel: false
+                                        },
+                                        function(isConfirm) {
+                                        if (isConfirm) {
+                                            $.get(target_addr,function(data){
+                                                if($.isEmptyObject(data.errors)){
+                                                    swal({ 
+                                                        type: 'success',
+                                                        title: 'Success',
+                                                        text: data.success 
+                                                    });
+                                                }else{
+                                                    swal({ 
+                                                        html:true,
+                                                        type: 'error',
+                                                        title: 'Error',
+                                                        text:'<span style=\"font-size:14px\">'+ data.errors +'</span>',
+                                                    });
+                                                }
+                                            })
+                                        } else {
+                                                swal(\"Cancelled\", \"Anda Membatalkan menambahkan data :)\", \"error\");
+                                        }
+                                    });
+                            });
+        ";
         
-        return view('ipanel::pengetahuan.index',['data_pengetahuan'=>$data]);
+        return view('ipanel::pengetahuan.index',['data'=>$data]);
     }
 
     public static function get_count($id){
@@ -640,6 +681,11 @@ class PengetahuanController extends Controller
 		return ($order + 1);
     }
 
+    public function nextid_news(){
+        $order =DB::table($this->table_newsletter)->max('newsId');
+		return ($order + 1);
+    }
+
     public function next_sort($pgid){
         $order =DB::table($this->table_pengetahuan_content)
                         ->where('pgId', $pgid)
@@ -963,4 +1009,44 @@ class PengetahuanController extends Controller
             }
         }
     }
+
+    public function add_newsletter($getid)
+    {
+        // print $getid;
+        // exit;
+        $data_get = DB::table($this->table_pengetahuan)
+                        ->where('pgPermalink', $getid)
+                        ->first();
+        
+        $data_c   = DB::table($this->table_newsletter)->where('pgId', $data_get->pgId)->count();               
+        if($data_c<=0){
+            $payload_c=[
+                'newsId'        =>$this->nextid_news(),
+                'pgId'          =>$data_get->pgId,
+                'newsPermalink' =>$this->nextid_news()."-".sha1($this->nextid_news()),
+                'newsTitle'     =>$data_get->pgTitle,
+                'newsURL'       =>url('front/materi/'.$data_get->pgPermalink),
+                'newsImage'     =>asset('storage/images/assets_pengetahuan/'.$data_get->pgImage),
+                'newsContent'   =>$data_get->pgDescription,
+
+                'newsCount'     =>0,
+                'nwtId'         =>1,
+                'newsGenerate'  =>'n',
+                'created_at'    =>date('Y-m-d H:i:s'),
+            ];
+
+            $save_content=DB::table($this->table_newsletter )->insert($payload_c);
+            if($save_content){
+                return response()->json(['success'=>"Berhasil Menambahkan News Letter"]);
+                exit;
+            }else{
+                return response()->json(['errors'=>"Gagal Menambahkan News Letter..!"]);
+                exit;
+            }
+        }else{
+            return response()->json(['errors'=>"Data Materi sudah ada di daftar News Letter..!"]);
+                exit;
+        }
+        
+    } 
 }

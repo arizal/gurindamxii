@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class NewsLetterQueueController extends Controller
 {
+    public $table_newsletter        ="newsletter";
     public $table_newsletter_queue  ="newsletter_queue";
     public $paging                  =10;
     /**
@@ -18,6 +19,7 @@ class NewsLetterQueueController extends Controller
     public function index()
     {
         $query      = DB::table($this->table_newsletter_queue);
+        $query      =$query->leftJoin($this->table_newsletter, $this->table_newsletter_queue.'.newsId', '=', $this->table_newsletter.'.newsId');
         if(isset($_GET['search'])){
             $query         = $query->where('nqBody',"like","%".$_GET['search']."%");
         }
@@ -54,7 +56,12 @@ class NewsLetterQueueController extends Controller
      */
     public function show($id)
     {
-        return view('ipanel::show');
+        $query      = DB::table($this->table_newsletter_queue);
+        $query      = $query->where('nqPermalink',$id);
+        $query      = $query->first();
+
+        print $query->nqBody;
+        exit;
     }
 
     /**

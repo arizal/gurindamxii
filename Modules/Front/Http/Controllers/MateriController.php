@@ -643,7 +643,9 @@ class MateriController extends Controller
         $data_ct=DB::table("pengetahuan_read_content")
                 ->select("rcId")
                 ->leftJoin("pengetahuan_content", 'pengetahuan_read_content.pcId', '=', 'pengetahuan_content.pcId')
+                ->leftJoin("pengetahuan_read", 'pengetahuan_read_content.prId', '=', 'pengetahuan_read.prId')
                 ->where('pengetahuan_content.pcPermalink', $contentlink)
+                ->where('pengetahuan_read.id_user', session()->get('USER_LOGIN.ID'))
                 ->get();
         return ($data_ct->count());
     }

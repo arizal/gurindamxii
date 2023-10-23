@@ -90,4 +90,9 @@ class NewsLetterSubscriberController extends Controller
     {
         //
     }
+
+    public function update_show($id)
+    {
+        //
+    }
 }

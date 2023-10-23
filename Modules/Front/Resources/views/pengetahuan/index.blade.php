@@ -397,7 +397,8 @@
                             </div>
                             <div class="" style="font-size:15px; padding:5px 0px 0px 15px;margin-top:-20px;">
                                 <span style="margin-top:0px;font-weight:bold">
-                                    <a href="{{url("front/materi/?cari_filter[]=".$pgval->catPermalink)}}" style="color:#C53A54">{{$pgval->catName}}</a>
+                                    {{$pgval->catName}}
+                                    <?php /*<a href="{{url("front/materi/?cari_filter[]=".$pgval->catPermalink)}}" style="color:#C53A54">{{$pgval->catName}}</a>*/ ?>
                                 </span>
                             </div>
                             <div class="member-info" style="margin-top:0px; padding: 0px 10px 15px 15px;text-align:justify; font-size:13px; font-weight:bold">

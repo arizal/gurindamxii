@@ -139,7 +139,7 @@
         }
     </style>
     <!-- ======= Breadcrumbs ======= -->
-    <section class="breadcrumbs">
+    <section class="breadcrumbs" <?php if(isset($_GET['display'])){ print ' style="display:none"'; } ?>>
         <div class="container">
             <div style="display:block; float:left;width:100%">
                 <ol>
@@ -148,12 +148,6 @@
                 </ol>
             </div>
             <div class="d-flex justify-content-between align-items-center" style="float:left; text-align:justify">
-                <!-- <div style="display:block; float:left;width:100%">
-                    <ol>
-                        <li><a href="{{url("/front")}}">Home</a></li>
-                        <li>Materi</li>
-                    </ol>
-                </div> -->
                 <h2 style="font-weight:bold">{{$data['data']->pgTitle}}</h2>
             </div>
             <div style="display:block; float:left;width:100%;">
@@ -192,16 +186,7 @@
                             color:#7d6026;
                         }
                     </style>
-                    <?php /*    
-                    <button class="btn btn-xs btn-white btn-warning btn-bold">
-                        <i class="ace-icon fa fa-list bigger-120 red2"></i>
-                    </button>
-                    <button class="btn btn-xs btn-white btn-warning btn-bold">
-                        <i class="ace-icon fa fa-thumbtack bigger-120 red2"></i>
-                    </button>
-                    <button class="btn btn-xs btn-white btn-warning btn-bold">
-                        <i class="ace-icon fa fa-heart bigger-120 red2"></i>
-                    </button> */ ?>
+                    
                     <a class="btn_dtl" title="Tambahkan ke Daftar Baca" onClick="addItemToCart('{{$data['data']->pgPermalink}}','read_later')"><i class="fa-solid fa-list"></i> &nbsp;Baca Nanti</a>
                     <?php /*<a style="<?php #{{$pgval->pnId ? 'background:red; color:white' : ''}} ?>" class="btn_dtl done_already" title="Tandai Materi ini" onClick="addItemToCart('{{$data['data']->pgPermalink}}','pin')"><i class="fa-solid fa-thumbtack"></i></a>*/ ?>
                     <a style="<?php #{{$pgval->lkId ? 'background:red; color:white' : ''}} ?>" class="btn_dtl" title="Sukai Materi ini" onClick="addItemToCart('{{$data['data']->pgPermalink}}','like')""><i class="fa-solid fa-heart"></i> &nbsp;Sukai</a>
@@ -212,7 +197,58 @@
         </div>
     </section><!-- End Breadcrumbs -->
 
-    <section class="inner-page" style="padding:0px">
+    <section class="inner-page" style="padding:0px;">
+        @if(isset($_GET['display']))
+        <div class="container" style="margin-top:80px;">
+            <div class="d-flex justify-content-between align-items-center" style="float:left; text-align:justify">
+                <h2 style="font-weight:bold">{{$data['data']->pgTitle}}</h2>
+            </div>
+            <div style="display:block; float:left;width:100%;">
+                <span class="label label-xlg label-danger arrowed">&nbsp; {{$data['data']->pgType}} &nbsp;</span>
+                <span style="font-size:16px;">{{$data['data']->catName}}</span>
+            </div>
+            <div style="display:block; float:left;width:100%;font-size:11px;">
+                <div style="float:left">
+                    {{date("d M Y H:i:s",strtotime($data['data']->pgTimePost))}} WIB
+                </div>
+                <div style="float:right; padding-bottom:20px;" class="social">
+                    <style type="text/css">
+                        .social a{
+                            margin: 0 3px;
+                            border-radius: 4px;
+                            min-width: 36px;
+                            height: 36px;
+                            background: rgba(255, 255, 255, 0.8);
+                            transition: ease-in-out 0.3s;
+                            color: #484848;
+                            display: inline-flex;
+                            justify-content: center;
+                            align-items: center;
+                            font-size:18px;
+                            border:1px solid #C78400;
+                            padding:0px 5px 0px 5px;
+                        }
+                        .social a:hover{
+                            cursor:pointer;
+                            background-color:#FEB652;
+                        }
+                        a.btn_dtl{
+                            color:#C78400;
+                        }
+                        a.btn_dtl:hover{
+                            color:#7d6026;
+                        }
+                    </style>
+                    
+                    <a class="btn_dtl" title="Tambahkan ke Daftar Baca" onClick="addItemToCart('{{$data['data']->pgPermalink}}','read_later')"><i class="fa-solid fa-list"></i> &nbsp;Baca Nanti</a>
+                    <?php /*<a style="<?php #{{$pgval->pnId ? 'background:red; color:white' : ''}} ?>" class="btn_dtl done_already" title="Tandai Materi ini" onClick="addItemToCart('{{$data['data']->pgPermalink}}','pin')"><i class="fa-solid fa-thumbtack"></i></a>*/ ?>
+                    <a style="<?php #{{$pgval->lkId ? 'background:red; color:white' : ''}} ?>" class="btn_dtl" title="Sukai Materi ini" onClick="addItemToCart('{{$data['data']->pgPermalink}}','like')""><i class="fa-solid fa-heart"></i> &nbsp;Sukai</a>
+                </div>
+                
+                
+            </div>
+        </div>
+        @endif
         <div class="container" style="text-align:justify; ">
             <?php /* <h3>{{$categori_pembelajaran->catPermalink}}</h3>
             <p>Writen By : {{$categori_pembelajaran->catPermalink}}</p>
@@ -428,6 +464,33 @@
                                     @if($ctval->pcContentType =='text')
                                         {!!$ctval->pcText!!}
                                     @endif
+
+                                    @auth
+                                        @if (\Illuminate\Support\Facades\Auth::user()->hasRole('user')  == 'user')
+                                            dia logon
+                                            {{-- START : TOMBOL TANDAI SUDAH SELESAI --}}
+                                                @php
+                                                $already_finish = Modules\Front\Http\Controllers\MateriController::get_beread($ctval->pcPermalink);
+                                                @endphp
+                                                <div class="row">
+                                                    {{$already_finish}}
+                                                </div>
+                                                @if($already_finish===0)
+                                                <div style="text-align:right !important; padding-bottom:10px;">
+                                                    <a href="{{route('materi.post_finish',$ctval->pcPermalink)}}" class="clicks click_{{$ctid}}" title="click_{{$ctid}}">
+                                                        <button class="btn btn-xs btn-info" <?php /*OnClick="alert('hahha')" */ ?>>
+                                                            <i class="ace-icon fa fa-bolt bigger-110"></i>
+                                                                Tandai Selesai
+                                                            <i class="ace-icon fa fa-arrow-right icon-on-right"></i>
+                                                        </button>
+                                                    </a>
+                                                </div>
+                                                @endif
+                                            {{-- END : TOMBOL TANDAI SUDAH SELESAI --}}
+                                        @else
+                                            gak login
+                                        @endif
+                                    @endauth    
                                 @endif
                             </div>
                         </div><!-- end of accordion body -->
@@ -923,7 +986,7 @@
             <div class="col-lg-12 col-md-12 d-flex align-items-stretch" style="margin-bottom:10px;margin-top:20px;  ">
                 <span style="font-weight:bold; border-bottom:1px solid #ccc; width:100%">Materi lainnya :</span><br>
             </div>    
-            <div class="row" style="padding:5px; background-color:white">
+            <div class="row" style="padding:5px; background-color:white; padding-bottom:40px;">
                 @foreach($data['materi_lain'] as $makey=>$maval)
                 @php
                 $time_ago = Modules\Front\Http\Controllers\MateriController::time_elapsed_string($maval->pgTimePost);

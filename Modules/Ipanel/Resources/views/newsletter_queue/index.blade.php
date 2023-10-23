@@ -67,7 +67,7 @@
                                 -
                             @endif    
                         </strong></em><br>
-                    <i class="fa fa-street-view bigger-120"></i>: <em>{{$daval->nqEmail}}</em><br>
+                    <i class="fa fa-newspaper-o bigger-120"></i>: <em><a href="{{$daval->newsURL}}" target="_blank">{{$daval->newsTitle}}</a></em><br>
                 </td>
                 <td>
                     @if($daval->nqSent != '0000-00-00 00:00:00')
@@ -77,32 +77,14 @@
                     @endif
                 </td>
                 <td>
-                    <div class="hidden-sm hidden-xs btn-group">
-                        <a href="{{route('pengetahuan.edit',$daval->nqPermalink)}}" title="Edit Pengetahuan">
+                    <div class="btn-group">
+                        <a rel="facebox" href="{{route('newsletter_queue.show',$daval->nqPermalink)}}" title="Edit Pengetahuan">
                             <button class="btn btn-mini btn-warning">
                             <i class="fa fa-list bigger-120"></i>
                             </button>
                         </a>
 
                     </div>
-                    <div class="hidden-md hidden-lg">
-                        <div class="inline pos-rel">
-                            <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                                <i class="ace-icon fa fa-cog icon-only bigger-120"></i>
-                            </button>
-
-                            <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                <li>
-                                    <a href="{{route('pengetahuan.edit',$daval->nqPermalink)}}" class="tooltip-info" data-rel="tooltip" title="Edit">
-                                        <span class="blue">
-                                            <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
                 </td>
             </tr>
             <?php

@@ -75,7 +75,7 @@
       <nav id="navbar" class="navbar order-last order-lg-0">
         <ul>
           <li><a class="nav-link scrollto " href="{{url('/front/')}}">Home</a></li>
-          <li><a class="nav-link scrollto" href="{{url('/front/#about')}}">About</a></li>
+          <?php /*<li><a class="nav-link scrollto" href="{{url('/front/#about')}}">About</a></li>*/ ?>
           <?php /*<li><a class="nav-link scrollto" href="#services">Services</a></li>
           <li><a class="nav-link scrollto " href="#portfolio">Portfolio</a></li> */ ?>
           <li><a class="nav-link scrollto <?php /*active*/ ?>" href="{{url('/front/materi/')}}">Materi</a></li>
@@ -173,7 +173,7 @@
             <p>Daftarkan Email anda untuk mendapatkan informasi Materi yang baru ditambahkan</p>
             <form action="{{route('post_ajax.post_newsletter')}}" method="post" id="post_newsletter">
               @csrf
-              <input type="email" name="email" placeholder="Masukkan Email Anda">
+              <input type="email" name="email" placeholder="Masukkan Email Anda" class="post_newsletter">
               <input type="submit" value="Daftarkan Email">
             </form>
 
@@ -262,6 +262,7 @@
               async:false,
               success: function(data){
                 if($.isEmptyObject(data.errors)){
+                  $(".post_newsletter").val('');
                   swal({ 
                     html:true,
                     type: 'success',
@@ -436,7 +437,7 @@
                             +'</div>'
                             +'<div class="" style="font-size:15px; padding:5px 0px 0px 15px;margin-top:-20px;">'
                               +'<span style="margin-top:0px;font-weight:bold">'
-                                +'<a href="'+value.caturl+'" style="color:#C53A54">'+value.cat+'</a>'
+                                +''+value.cat+''
                               +'</span>'
                             +'</div>'
                             +'<div class="member-info" style="margin-top:0px; padding: 0px 10px 15px 15px;text-align:justify; font-size:13px; font-weight:bold">'
@@ -525,7 +526,7 @@
                             +'</div>'
                             +'<div class="" style="font-size:15px; padding:5px 0px 0px 15px;margin-top:-20px;">'
                               +'<span style="margin-top:0px;font-weight:bold">'
-                                +'<a href="'+value.caturl+'" style="color:#C53A54">'+value.cat+'</a>'
+                                +''+value.cat+''
                               +'</span>'
                             +'</div>'
                             +'<div class="member-info" style="margin-top:0px; padding: 0px 10px 15px 15px;text-align:justify; font-size:13px; font-weight:bold">'

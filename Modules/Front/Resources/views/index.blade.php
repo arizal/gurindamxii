@@ -182,7 +182,7 @@
                         <h1><span>GURINDAM</span></h1>
                         <h2>Gapura Pembelajaran Individu Aktif Mandiri Sebagai Pusat Pembelajaran ASN</h2>
                     </div>
-                    <form action="{{route('materi.index')}}<?php /*{url('/front/materi/')} */ ?>" method="GET">
+                    <form action="{{route('materi.index')}}<?php /*{url('/front/materi/')} */ ?>" method="GET" style="padding-top:50px;">
                         @csrf
                         <?php /*
                         <div class="search__container">
@@ -278,34 +278,158 @@
         </section><!-- End Hero -->
 
         <main id="main">
-
-            <!-- ======= About Section ======= -->
             
+            <!-- ======= About Section ======= -->
             <section id="about" class="about">
-            <div class="container" data-aos="fade-up">
-                <div class="row">
-                <div class="col-lg-3 order-1 order-lg-2" data-aos="fade-left" data-aos-delay="100">
-                    <img src="{{asset('images/logo/logo-gurindam.png')}}" class="img-fluid" alt="" style="width:100%">
+                <div class="container" style="background-color:white; padding:10px;">
+                    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="false">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            @php
+                                $no=1;
+                            @endphp
+                            @foreach($data_pengetahuan['highlight'] as $hkey=>$hval)
+                            <div class="carousel-item <?php print $no==1 ? 'active' : ''; ?>">
+                                <div class="row">
+                                    <div class="col">
+                                        <img src="{{asset('storage/images/assets_pengetahuan/'.$hval->pgImage)}}" class="d-block w-100" alt="..." style="height:300px;">
+                                    </div>
+                                    <div class="col">
+                                        <div class="row">
+                                            <h1>{{$hval->pgTitle}}</h1>
+                                            <p style="text-align:justify" class="hidden-sm hidden-xs">
+                                                {{substr(strip_tags($hval->pgDescription),0,200)}}
+                                            </p>
+                                            <?php /*
+                                            <div class="carousel-caption d-none d-md-block">
+                                                <h5>First slide label</h5>
+                                                <p>Some representative placeholder content for the first slide.</p>
+                                            </div> */ ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @php 
+                            $no++;
+                            @endphp
+                            @endforeach
+                            <?php /*
+                            <div class="carousel-item">
+                                <div class="row">
+                                    <div class="col">
+                                        <img src="http://127.0.0.1:8000/storage/images/assets_pengetahuan/2023/10/20231010/6524b8e4aac46.jpg" class="d-block w-100" alt="..." style="height:300px;">
+                                    </div>
+                                    <div class="col">
+                                        <div class="carousel-caption d-none d-md-block">
+                                            <h5>Second slide label</h5>
+                                            <p>Some representative placeholder content for the second slide.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="carousel-item">
+                                <div class="row">
+                                    <div class="col">
+                                        <img src="http://127.0.0.1:8000/storage/images/assets_pengetahuan/2023/10/20231010/6524d5cbd0dd7.jpg" class="d-block w-100" alt="..." style="height:300px;">
+                                    </div>
+                                    <div class="col">
+                                        <div class="carousel-caption d-none d-md-block">
+                                            <h5>Second slide label</h5>
+                                            <p>Some representative placeholder content for the second slide.</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>*/ ?>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Next</span>
+                        </button>
+                    </div>
+                </div>    
+                <?php /*
+                <div class="container">
+                    <div class="container-fluid py-2">
+                        <div class="row align-items-center">
+                            <div class="col-auto">
+                                <a class="h1" href="#carouselExampleControls" role="button" data-slide="prev">
+                                    <span>&lt;</span>
+                                </a>
+                            </div>
+                            <div class="col">
+                                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active">
+                                            <div class="row align-items-center">
+                                                <div class="col-md py-2">
+                                                    <p> Text text text here. Text here, here, here, here is the text. Text here, here, here, here is the text. </p>
+                                                    <button class="btn btn-primary">More here</button>
+                                                </div>
+                                                <div class="col-md py-2">
+                                                    <img class="d-block img-fluid" src="//placehold.it/900x500" alt="First slide">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="carousel-item">
+                                            <div class="row align-items-center">
+                                                <div class="col">
+                                                    <p> Text text text here. Text here, here, here, here is the text. Text here, here, here, here is the text. </p>
+                                                    <button class="btn btn-primary">More...</button>
+                                                </div>
+                                                <div class="col">
+                                                    <img class="d-block img-fluid" src="//placehold.it/900x500/990033" alt="2nd slide">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="carousel-item">
+                                            <div class="row align-items-center">
+                                                <div class="col">
+                                                    <p> Text text text here. Text here, here, here, here is the text. Text here, here, here, here is the text. </p>
+                                                    <button class="btn btn-primary">More...</button>
+                                                </div>
+                                                <div class="col">
+                                                    <img class="d-block img-fluid" src="//placehold.it/900x500/ffcc00" alt="3rd slide">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-auto">
+                                <a class="h1" href="#carouselExampleControls" role="button" data-slide="next">
+                                    <span>&gt;</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-lg-9 pt-4 pt-lg-0 order-2 order-lg-1 content" data-aos="fade-right" data-aos-delay="100">
-                    <h3>Gurindam - Gapura Pembelajaran Individu Aktif Mandiri Sebagai Pusat Pembelajaran ASN.</h3>
-                    <p class="fst-italic">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-                    magna aliqua.
-                    </p>
-                    <ul>
-                    <li><i class="ri-check-double-line"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat.</li>
-                    <li><i class="ri-check-double-line"></i> Duis aute irure dolor in reprehenderit in voluptate velit.</li>
-                    <li><i class="ri-check-double-line"></i> Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate trideta storacalaperda mastiro dolore eu fugiat nulla pariatur.</li>
-                    </ul>
-                    <p>
-                    Ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate
-                    velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident
-                    </p>
+                */ ?>
+                <?php /*
+                <div class="container" data-aos="fade-up">
+                    <div class="row">
+                        <div class="col-lg-3 order-1 order-lg-2" data-aos="fade-left" data-aos-delay="100">
+                            <img src="{{asset('images/logo/logo-gurindam.png')}}" class="img-fluid" alt="" style="width:100%">
+                        </div>
+                        <div class="col-lg-9 pt-4 pt-lg-0 order-2 order-lg-1 content" data-aos="fade-right" data-aos-delay="100">
+                            <h3>Gurindam - Gapura Pembelajaran Individu Aktif Mandiri Sebagai Pusat Pembelajaran ASN.</h3>
+                            <p class="fst-italic" style="text-align:justify">
+                                Gapura Pembelajaran Individu Aktif Mandiri Sebagai Pusat Pembelajaran Aparatur Sipil Negara (Gurindam) 
+                                Merupakan Aplikasi yang dikembangkan oleh Badan Kepegawaian Negara Kantor Region XII Pekanbaru, 
+                                yang dapat digunakan oleh Seluruh Pengunjung terkhususnya untuk seluruh Aparatur Sipil Negara 
+                                untuk melakukan pembelajaran secara mandiri dengan membaca atau melihat materi yang tersedia pada aplikasi Gurindam.
+                            </p>
+                        </div>
+                    </div>
                 </div>
-                </div>
-
-            </div>
+                */?>
             </section> 
             <!-- End About Section -->
             <?php
@@ -817,7 +941,8 @@
                             </div>
                             <div class="" style="font-size:15px; padding:5px 0px 0px 15px;margin-top:-20px;">
                                 <span style="margin-top:0px;font-weight:bold">
-                                    <a href="{{url("front/materi/?cari_filter[]=".$pgval->catPermalink)}}" style="color:#C53A54">{{$pgval->catName}}</a>
+                                    {{$pgval->catName}}
+                                    <?php /*<a href="{{url("front/materi/?cari_filter[]=".$pgval->catPermalink)}}" style="color:#C53A54">{{$pgval->catName}}</a>*/ ?>
                                 </span>
                             </div>
                             <div class="member-info" style="margin-top:0px; padding: 0px 10px 15px 15px;text-align:justify; font-size:13px; font-weight:bold">
@@ -895,7 +1020,8 @@
                             </div>
                             <div class="" style="font-size:15px; padding:5px 0px 0px 15px;margin-top:-20px;">
                                 <span style="margin-top:0px;font-weight:bold">
-                                    <a href="{{url("front/materi/?cari_filter[]=".$pgval->catPermalink)}}" style="color:#C53A54">{{$pgval->catName}}</a>
+                                    {{$pgval->catName}}
+                                    <?php /*<a href="{{url("front/materi/?cari_filter[]=".$pgval->catPermalink)}}" style="color:#C53A54">{{$pgval->catName}}</a>*/ ?>
                                 </span>
                             </div>
                             <div class="member-info" style="margin-top:0px; padding: 0px 10px 15px 15px;text-align:justify; font-size:13px; font-weight:bold">

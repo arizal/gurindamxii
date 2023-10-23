@@ -1492,6 +1492,11 @@ section {
   margin-bottom: 30px;
 }
 
+#footer .footer-top .footer-info a {
+  color: #ffc451;
+  text-decoration: none;
+}
+
 #footer .footer-top .footer-info h3 {
   font-size: 28px;
   margin: 0 0 20px 0;

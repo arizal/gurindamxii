@@ -21,6 +21,7 @@ class FrontController extends Controller
     public $table_pengetahuan           ="pengetahuan";
     public $table_pengetahuan_content   ="pengetahuan_content";
     public $table_pengetahuan_category  ="pengetahuan_category";
+    public $table_pengetahuan_highlight ="pengetahuan_highlight";
 
     public $table_pengetahuan_like              ="pengetahuan_like";
     public $table_pengetahuan_pinned            ="pengetahuan_pinned";
@@ -149,9 +150,23 @@ class FrontController extends Controller
                                 ->orderBy('catName', 'ASC')
                                 ->get();
 
+        $query_highlight      = DB::table($this->table_pengetahuan_highlight)
+                                ->select(
+                                    $this->table_pengetahuan.".pgTitle",
+                                    $this->table_pengetahuan.".pgPermalink",
+                                    $this->table_pengetahuan.".pgImage",
+                                    $this->table_pengetahuan.".pgDescription",
+                                )
+                                ->leftJoin($this->table_pengetahuan, $this->table_pengetahuan_highlight.'.pgId', '=', $this->table_pengetahuan.'.pgId')
+                                ->where('hlStart',"<",date('Y-m-d H:i:s'))
+                                ->where('hlEnd',">",date('Y-m-d H:i:s'))
+                                ->orderBy('hlStart', 'ASC')
+                                ->get();                        
+        
         $data['data']           =$query;
         $data['populer']        =$query_populer;
-        $data['category']       =$query_category;                        
+        $data['category']       =$query_category;
+        $data['highlight']       =$query_highlight;                        
         $data['assets_storage'] ="storage/".$this->assets_pengetahuan;
         
         // print "<pre>";

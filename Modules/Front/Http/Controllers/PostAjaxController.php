@@ -73,6 +73,20 @@ class PostAjaxController extends Controller
         // print_r($CHECK_LOGIN);
         // print_r($_POST);
         // exit;
+        #CHECK IP FIRST-------------------------------------------------------
+        if(!empty($_SERVER['HTTP_CLIENT_IP'])) {  
+            $ip_access = $_SERVER['HTTP_CLIENT_IP'];  
+        }  
+        //if user is from the proxy  
+        elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {  
+            $ip_access =$_SERVER['HTTP_X_FORWARDED_FOR'];  
+        }  
+        //if user is from the remote address  
+        else{  
+            $ip_access =$_SERVER['REMOTE_ADDR'];  
+        } 
+        $ip_address_access=getenv($ip_access);
+
         $data_pg    = DB::table($this->table_pengetahuan)->where('pgPermalink', $request->id)->first();
         if($request->type_options ==="like"){
             $note_response="Sukai";
@@ -92,6 +106,7 @@ class PostAjaxController extends Controller
                 $payload=[
                     'id_user'     => $id_user,
                     'pgId'        => $data_pg->pgId,
+                    'lkIP'        => $ip_access,
                     'created_at'  => date("Y-m-d H:i:s"),
                 ];
                 $table_name_for_saving=$this->table_pengetahuan_like;
@@ -166,13 +181,50 @@ class PostAjaxController extends Controller
                 ];
             }
         }else{
-            $response=[
-                'success'   =>"Gagal",
-                "ID"        =>$request->id,
-                "TITLE"     =>$data_pg->pgTitle,
-                "NOTE"      =>"Anda harus <span style='color:#FFC451;font-weight:bold'>Login</span> terlebih dahulu untuk Menambahkan ke dalam ".$note_response,
-                "ICON"      =>"/assets/images/cross.png",
-            ];
+            if($request->type_options ==="like"){
+                $note_response="Sukai";
+                $data_check = DB::table($this->table_pengetahuan_like)
+                                  ->where('pgId', $data_pg->pgId)
+                                  ->where('lkIP', $ip_access)
+                                  ->where('created_at',"LIKE",date('Y-m-d')."%")
+                                  ->count();
+
+                $payload=[
+                    'id_user'     => 0,
+                    'pgId'        => $data_pg->pgId,
+                    'lkIP'        => $ip_access,
+                    'created_at'  => date("Y-m-d H:i:s"),
+                ];
+                $table_name_for_saving=$this->table_pengetahuan_like;
+
+                if($data_check==0){
+                    $save_pinetc=DB::table($table_name_for_saving)->insert($payload);
+                    
+                    $response=[
+                        'success'   =>"Berhasil",
+                        "ID"        =>$request->id,
+                        "TITLE"     =>$data_pg->pgTitle,
+                        "NOTE"      =>($request->type_options !== "read_later" ? "ke dalam daftar yang anda ".$note_response : "ke dalam Daftar Baca Anda"),
+                        "ICON"      =>"/assets/images/check.png",
+                    ];
+                }else{
+                    $response=[
+                        'success'   =>"Gagal",
+                        "ID"        =>$request->id,
+                        "TITLE"     =>$data_pg->pgTitle,
+                        "NOTE"      =>($request->type_options !== "read_later" ? "karena anda Sudah melakukan ".$note_response." pada materi ini" : "Karena Sudah ada di dalam Daftar Baca Anda"),
+                        "ICON"      =>"/assets/images/cross.png",
+                    ];
+                }
+            }else{
+                $response=[
+                    'success'   =>"Gagal",
+                    "ID"        =>$request->id,
+                    "TITLE"     =>$data_pg->pgTitle,
+                    "NOTE"      =>"Anda harus <span style='color:#FFC451;font-weight:bold'>Login</span> terlebih dahulu untuk Menambahkan ke dalam ".$note_response,
+                    "ICON"      =>"/assets/images/cross.png",
+                ];
+            }
         }
         // print_r($data_check);
         // exit;

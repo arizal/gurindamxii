@@ -40,10 +40,12 @@ Route::prefix("ipanel")->namespace('\Modules\Ipanel\Http\Controllers')->middlewa
     Route::get('pengetahuan/edit_submateri/{id}', 'PengetahuanController@edit_submateri')->name('pengetahuan.edit_submateri');
     Route::get('pengetahuan/destroy_submateri/{id}', 'PengetahuanController@destroy_submateri')->name('pengetahuan.destroy_submateri');
     Route::post('pengetahuan/update_submateri/{id}', 'PengetahuanController@update_submateri')->name('pengetahuan.update_submateri');
+    Route::get('pengetahuan/add_newsletter/{id}', 'PengetahuanController@add_newsletter')->name('pengetahuan.add_newsletter');
     
     Route::get('pengetahuan/displayImage/{id}', 'PengetahuanController@displayImage')->name('pengetahuan.displayImage');
 
     Route::resource('newsletter_subscriber','NewsLetterSubscriberController');
+    Route::get('newsletter_subscriber/update_show/{id}', 'NewsLetterSubscriberController@update_show')->name('newsletter_subscriber.update_show');
     Route::resource('newsletter_queue','NewsLetterQueueController');
     Route::resource('newsletter','NewsLetterController');
 

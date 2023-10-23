@@ -59,12 +59,12 @@
         <tbody>
             <?php 
             #for($x=1;$x<5;$x++){?>
-            @foreach($data_pengetahuan['data'] as $catkey=>$catpem)
+            @foreach($data['data'] as $catkey=>$catpem)
             @php
-                $comments = Modules\Ipanel\Http\Controllers\PengetahuanController::get_count($catpem->pgId);
+                $comments   = Modules\Ipanel\Http\Controllers\PengetahuanController::get_count($catpem->pgId);
             @endphp
             <tr>
-                <td class="center">{{($data_pengetahuan['data']->currentPage() - 1) * $data_pengetahuan['data']->perPage() + $loop->iteration}}</td>
+                <td class="center">{{($data['data']->currentPage() - 1) * $data['data']->perPage() + $loop->iteration}}</td>
                 <td class="hidden-480">
                     @if($catpem->pgImage)
                         <?php #<a href="{{url($data_category['assets_storage']).'/'.$catpem->catImage}}" rel="facebox"> ?>   
@@ -125,6 +125,12 @@
                             </button>
                         </a>
 
+                        <a href="{{route('pengetahuan.add_newsletter',$catpem->pgPermalink)}}" title="Data Detail Pengetahuan" class="addnewsletter">
+                            <button class="btn btn-mini" style="width:59px;margin-top:4px;">
+                                <i class="fa fa-plus bigger-120"></i>
+                                <i class="fa fa-newspaper-o bigger-120"></i>
+                            </button>
+                        </a>
                     </div>
                     <div class="hidden-md hidden-lg">
                         <div class="inline pos-rel">
@@ -156,6 +162,14 @@
                                         </span>
                                     </a>
                                 </li>
+
+                                <li>
+                                    <a href="{{route('pengetahuan.add_newsletter',$catpem->pgPermalink)}}" class="tooltip-error addnewsletter" data-rel="tooltip" title="Tambahkan kedalam News Letter">
+                                        <span class="red">
+                                            <i class="ace-icon fa fa-newspaper-o bigger-120"></i>
+                                        </span>
+                                    </a>
+                                </li>
                             </ul>
                         </div>
                     </div>
@@ -167,5 +181,5 @@
             @endforeach
         </tbody>
     </table>
-    {{$data_pengetahuan['data']->links()}}
+    {{$data['data']->links()}}
 @endsection

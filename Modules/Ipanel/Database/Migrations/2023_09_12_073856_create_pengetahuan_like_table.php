@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('pengetahuan_like', function (Blueprint $table) {
             $table->increments("lkId",10);
+            $table->string("lkIP");
             $table->integer("id_user");
             $table->integer("pgId");
             $table->timestamps();

@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="page-header">
-        <h1>News Letter Queue
+        <h1>News Letter
             <small>
                 <i class="ace-icon fa fa-angle-double-right"></i> isi dari page desctiption 
             </small>
@@ -63,42 +63,23 @@
                         <strong>
                             {{date("d M Y H:i:s",strtotime($daval->created_at))}} WIB
                         </strong></em><br>
-                    <i class="fa fa-street-view bigger-120"></i>: <em>{{$daval->newsTitle}}</em><br>
+                        <i class="fa fa-newspaper-o bigger-120"></i>: <em><a href="{{$daval->newsURL}}" target="_blank">{{$daval->newsTitle}}</a></em><br>
                 </td>
                 <td>
-                    @if($daval->created_at != '0000-00-00 00:00:00')
+                    @if($daval->newsGenerate=='y')
                         <i class="fa fa-send bigger-120"></i>
                     @else
                         <i class="fa fa-clock-o bigger-120"></i>
                     @endif
                 </td>
                 <td>
-                    <div class="hidden-sm hidden-xs btn-group">
-                        <a href="{{route('pengetahuan.edit',$daval->newsPermalink)}}" title="Edit Pengetahuan">
-                            <button class="btn btn-mini btn-warning">
-                            <i class="fa fa-list bigger-120"></i>
+                    <div class=" btn-group">
+                        <a href="{{route('newsletter.destroy',$daval->newsPermalink)}}" title="Edit Pengetahuan" class="deletes">
+                            <button class="btn btn-mini btn-danger">
+                            <i class="fa fa-trash bigger-120"></i>
                             </button>
                         </a>
-
                     </div>
-                    <div class="hidden-md hidden-lg">
-                        <div class="inline pos-rel">
-                            <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                                <i class="ace-icon fa fa-cog icon-only bigger-120"></i>
-                            </button>
-
-                            <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                <li>
-                                    <a href="{{route('pengetahuan.edit',$daval->newsPermalink)}}" class="tooltip-info" data-rel="tooltip" title="Edit">
-                                        <span class="blue">
-                                            <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-
                 </td>
             </tr>
             <?php

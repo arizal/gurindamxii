@@ -64,31 +64,15 @@
                 </td>
                 <td>{{$daval->nsubStatus}}</td>
                 <td>
-                    <div class="hidden-sm hidden-xs btn-group">
-                        <a href="{{route('pengetahuan.edit',$daval->nsubPermalink)}}" title="Edit Pengetahuan">
+                    <div class=" btn-group">
+                        <a href="{{route('newsletter_subscriber.update_show',$daval->nsubPermalink)}}" title="Edit Pengetahuan">
                             <button class="btn btn-mini btn-info">
                             <i class="fa fa-eye bigger-120"></i>
                             </button>
                         </a>
 
                     </div>
-                    <div class="hidden-md hidden-lg">
-                        <div class="inline pos-rel">
-                            <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
-                                <i class="ace-icon fa fa-cog icon-only bigger-120"></i>
-                            </button>
-
-                            <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
-                                <li>
-                                    <a href="{{route('pengetahuan.edit',$daval->nsubPermalink)}}" class="tooltip-info" data-rel="tooltip" title="Edit">
-                                        <span class="blue">
-                                            <i class="ace-icon fa fa-pencil bigger-120"></i>
-                                        </span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+                    
 
                 </td>
             </tr>

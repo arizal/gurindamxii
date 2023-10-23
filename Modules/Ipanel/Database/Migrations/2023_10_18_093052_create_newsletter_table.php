@@ -15,6 +15,7 @@ return new class extends Migration
     {
         Schema::create('newsletter', function (Blueprint $table) {
             $table->increments("newsId",10);
+            $table->integer("pgId");
             $table->string("newsPermalink");
             $table->string("newsTitle");
             $table->string("newsURL");
